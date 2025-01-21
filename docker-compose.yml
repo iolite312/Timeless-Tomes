@@ -1,0 +1,18 @@
+version: '3.1'
+
+services:
+    nginx:
+        image: nginx:latest
+        depends_on:
+            - php
+        volumes:
+            - ./nginx-dev.conf:/etc/nginx/nginx.conf
+            - ./:/app
+        ports:
+            - "80:80"
+    php:
+        build:
+            context: .
+            dockerfile: PHP.Dockerfile
+        volumes:
+            - ./:/app

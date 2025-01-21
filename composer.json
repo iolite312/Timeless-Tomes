@@ -2,7 +2,7 @@
     "name": "dev/eindopdracht",
     "autoload": {
         "psr-4": {
-            "Dev\\Eindopdracht\\": "app/"
+            "App\\": "app/"
         }
     },
     "authors": [
