@@ -1,0 +1,15 @@
+{
+    "name": "dev/eindopdracht",
+    "autoload": {
+        "psr-4": {
+            "Dev\\Eindopdracht\\": "app/"
+        }
+    },
+    "authors": [
+        {
+            "name": "iolite312",
+            "email": "68647023+iolite312@users.noreply.github.com"
+        }
+    ],
+    "require": {}
+}
