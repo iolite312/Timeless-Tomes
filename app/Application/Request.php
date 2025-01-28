@@ -27,9 +27,9 @@ class Request
         return htmlspecialchars($_POST[$field]) ?? '';
     }
 
-    public static function getSession(): array
+    public static function getAuthToken(): string
     {
-        return $_SESSION ?? [];
+        return str_replace('Bearer ', '', $_SERVER['HTTP_AUTHORIZATION'] ?? '');
     }
 
     public static function setParams(array $params): void
