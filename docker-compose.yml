@@ -9,7 +9,7 @@ services:
             - ./nginx-dev.conf:/etc/nginx/nginx.conf
             - ./:/app
         ports:
-            - "80:80"
+            - "8080:8080"
     php:
         build:
             context: .
