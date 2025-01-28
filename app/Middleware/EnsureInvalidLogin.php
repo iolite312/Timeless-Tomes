@@ -2,16 +2,14 @@
 
 namespace App\Middleware;
 
-use App\Application\Session;
-use App\Application\Response;
+use App\Application\Request;
+use App\Helpers\TokenValidator;
 
 class EnsureInvalidLogin implements MiddlewareInterface
 {
     public function handle(): bool
     {
-        if (Session::get('user')) {
-            Response::redirect('/');
-
+        if (TokenValidator::isValid(Request::getAuthToken())) {
             return true;
         }
 
