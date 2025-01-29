@@ -15,11 +15,12 @@ COPY --from=build-stage /app/dist ./vue
 RUN apk add --no-cache --update git unzip nginx \
     && docker-php-ext-install pdo pdo_mysql \
     && curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer \
-    && cp .env.example .env \
     && composer install --optimize-autoloader --no-dev
+
+RUN mkdir -p /run/nginx
 
 COPY .github/docker/nginx.conf /etc/nginx/nginx.conf
 
-ENTRYPOINT [ ".github/docker/entrypoint.sh" ]
+ENTRYPOINT ["/bin/ash", ".github/docker/entrypoint.sh" ]
 EXPOSE 80
 CMD ["php-fpm"]

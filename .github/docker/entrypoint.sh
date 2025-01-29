@@ -1,7 +1,7 @@
-#!/bin/bash
+#!/bin/ash -e
 
 cd /app
 
-service nginx start
+nginx
 
 exec "$@"
