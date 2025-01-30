@@ -5,8 +5,6 @@
 </template>
 
 <script setup lang="ts">
-import type { ToastProps } from '@nuxt/ui'
-
 const toast = useToast()
 
 function showToast() {
