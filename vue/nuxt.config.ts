@@ -12,5 +12,13 @@ export default defineNuxtConfig({
   ssr: false,
   icon: {
     serverBundle: "local"
+  },
+  vite: {
+    envDir: '../'
+  },
+  runtimeConfig: {
+    public: {
+      MY_ENV: process.env.MY_ENV
+    }
   }
 })
