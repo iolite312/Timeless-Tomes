@@ -17,6 +17,13 @@ coverage
 .env
 .php-cs-fixer.cache
 blueberry
+# Nuxt dev/build outputs
+.output
+.data
+.nuxt
+.nitro
+.cache
+dist
 
 /cypress/videos/
 /cypress/screenshots/
