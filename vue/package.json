@@ -7,10 +7,14 @@
     "dev": "nuxt dev",
     "generate": "nuxt generate",
     "preview": "nuxt preview",
-    "postinstall": "nuxt prepare"
+    "postinstall": "nuxt prepare",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix"
   },
   "dependencies": {
+    "@nuxt/eslint": "1.0.0",
     "@nuxt/ui": "3.0.0-alpha.12",
+    "eslint": "^9.0.0",
     "nuxt": "^3.15.4",
     "vue": "latest",
     "vue-router": "latest"
@@ -18,6 +22,8 @@
   "devDependencies": {
     "@iconify-json/lucide": "^1.2.25",
     "@pinia/nuxt": "^0.9.0",
-    "@vueuse/nuxt": "^12.5.0"
-  }
+    "@vueuse/nuxt": "^12.5.0",
+    "typescript": "^5.7.3"
+  },
+  "packageManager": "pnpm@9.15.4+sha512.b2dc20e2fc72b3e18848459b37359a32064663e5627a51e4c74b2c29dd8e8e0491483c3abb40789cfd578bf362fb6ba8261b05f0387d76792ed6e23ea3b1b6a0"
 }
