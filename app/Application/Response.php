@@ -5,34 +5,23 @@ namespace App\Application;
 class Response
 {
     private int $statusCode = 200;
-    private string $content;
+    private mixed $content;
 
     public function setStatusCode(int $statusCode): void
     {
         $this->statusCode = $statusCode;
     }
 
-    public function setContent(string $content): void
+    public function setContent(mixed $content): void
     {
         $this->content = $content;
     }
 
-    public function send(): void
-    {
-        http_response_code($this->statusCode);
-        echo $this->content;
-    }
-
-    public static function setHeader(string $name, string $value): void
-    {
-        header("$name: $value");
-    }
-
-    public static function json(array $data)
+    public function json()
     {
         header('Content-Type: application/json');
-
-        return json_encode($data);
+        http_response_code($this->statusCode);
+        echo json_encode($this->content);
     }
 
     public static function redirect(string $url): void

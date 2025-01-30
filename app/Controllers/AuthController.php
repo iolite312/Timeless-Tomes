@@ -11,6 +11,6 @@ class AuthController extends Controller
     {
         $token = TokenGenerator::generateTemporaryToken();
 
-        return Response::json(['message' => $token]);
+        return ['message' => $token];
     }
 }
