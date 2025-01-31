@@ -58,7 +58,7 @@ class Router
             $content = call_user_func($route->callback, $this->request, $this->response);
             $this->response->setContent($content);
         }
-        $this->response->send();
+        $this->response->json();
     }
 
     private function routeExists($uri, $method): ?Route

@@ -8,6 +8,6 @@ class HomeController extends Controller
 {
     public function index()
     {
-        return Response::json(['message' => 'Hello World']);
+        return ['message' => 'Hello World'];
     }
 }
