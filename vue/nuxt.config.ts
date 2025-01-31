@@ -21,6 +21,7 @@ export default defineNuxtConfig({
     public: {
       MY_ENV: process.env.MY_ENV
     }
+  },
   meilisearch: {
   }
 })
