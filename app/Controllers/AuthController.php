@@ -2,7 +2,6 @@
 
 namespace App\Controllers;
 
-use App\Application\Request;
 use App\Helpers\TokenHelper;
 use App\Validation\UniqueRule;
 use Rakit\Validation\Validator;

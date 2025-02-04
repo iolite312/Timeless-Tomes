@@ -44,6 +44,7 @@ class UserRepository extends DatabaseRepository
 
         return null;
     }
+
     public function getUserByEmail(string $email): ?User
     {
         $sql = 'SELECT * FROM users WHERE email = :email';
