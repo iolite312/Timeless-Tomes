@@ -56,6 +56,11 @@ class Router
         } else {
             $route->callback[0] = new $route->callback[0]();
             $content = call_user_func($route->callback, $this->request, $this->response);
+
+            if (isset($content['status'])) {
+                $this->response->setStatusCode($content['status']);
+            }
+
             $this->response->setContent($content);
         }
         $this->response->json();
