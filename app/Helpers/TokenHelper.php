@@ -2,7 +2,9 @@
 
 namespace App\Helpers;
 
+use App\Models\User;
 use Ramsey\Uuid\Uuid;
+use Lcobucci\JWT\Token;
 use Lcobucci\JWT\Token\Parser;
 use Lcobucci\Clock\SystemClock;
 use Lcobucci\JWT\Token\Builder;
@@ -15,40 +17,32 @@ use Lcobucci\JWT\Token\InvalidTokenStructure;
 use Lcobucci\JWT\Encoding\CannotDecodeContent;
 use Lcobucci\JWT\Token\UnsupportedHeaderFound;
 use Lcobucci\JWT\Validation\Constraint\IssuedBy;
-use Lcobucci\JWT\Validation\Constraint\RelatedTo;
 use Lcobucci\JWT\Validation\Constraint\LooseValidAt;
 use Lcobucci\JWT\Validation\Constraint\PermittedFor;
 
 class TokenHelper
 {
-    public static function generateTemporaryToken()
+    public static function generateToken(User $user): string
     {
         $tokenBuilder = Builder::new(new JoseEncoder(), ChainedFormatter::default());
         $algorithm = new Sha256();
         $signingKey = InMemory::base64Encoded($_ENV['JWT_SECRET']);
 
-        $fakeUser = [
-            'id' => '1',
-            'email' => 'example.com',
-            'password' => '1234',
-        ];
-
         $now = new \DateTimeImmutable();
         $token = $tokenBuilder
             ->issuedBy($_ENV['JWT_ISSUER'])
             ->permittedFor($_ENV['JWT_AUDIENCE'])
-            ->relatedTo('Temporary')
             ->identifiedBy(Uuid::uuid4()->toString())
             ->issuedAt($now)
             ->canOnlyBeUsedAfter($now)
-            ->expiresAt($now->modify('+1 hour'))
-            ->withClaim('user', $fakeUser)
+            ->expiresAt($now->modify('+1 day'))
+            ->withClaim('user', $user->toArray())
             ->getToken($algorithm, $signingKey);
 
         return $token->toString();
     }
 
-    public static function isValid($encryptedToken)
+    public static function isValid($encryptedToken): bool
     {
         $parser = new Parser(new JoseEncoder());
         try {
@@ -61,7 +55,6 @@ class TokenHelper
             if (
                 !$validator->validate(
                     $token,
-                    new RelatedTo('Temporary'),
                     new IssuedBy($_ENV['JWT_ISSUER']),
                     new PermittedFor($_ENV['JWT_AUDIENCE']),
                     new LooseValidAt(SystemClock::fromUTC(), leeway: null)
@@ -71,6 +64,18 @@ class TokenHelper
             }
 
             return true;
+        } catch (CannotDecodeContent|InvalidTokenStructure|UnsupportedHeaderFound $e) {
+            return false;
+        }
+    }
+
+    public static function decode($encryptedToken): bool|Token
+    {
+        $parser = new Parser(new JoseEncoder());
+        try {
+            return $parser->parse(
+                $encryptedToken
+            );
         } catch (CannotDecodeContent|InvalidTokenStructure|UnsupportedHeaderFound $e) {
             return false;
         }
