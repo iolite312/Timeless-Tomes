@@ -11,8 +11,12 @@
                 <UButton icon="i-material-symbols-account-circle-full" color="neutral" variant="ghost" />
             </NuxtLink>
             <ClientOnly v-if="!colorMode?.forced">
-                <UButton :icon="isDark ? 'i-lucide-moon' : 'i-lucide-sun'" color="neutral" variant="ghost"
-                    @click="toggleDarkMode" />
+                <UButton 
+                    :icon="isDark ? 'i-lucide-moon' : 'i-lucide-sun'" 
+                    color="neutral" 
+                    variant="ghost"
+                    @click="toggleDarkMode" 
+                />
 
                 <template #fallback>
                     <div class="size-8" />
