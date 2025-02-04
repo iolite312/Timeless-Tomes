@@ -14,18 +14,17 @@ jobs:
 
       - run: corepack enable
         working-directory: ./vue
-      # - name: Use Latest Corepack
-      #   run: |
-      #     echo "Before: corepack version => $(corepack --version || echo 'not installed')"
-      #     npm install -g corepack@latest
-      #     echo "After : corepack version => $(corepack --version)"
-      #     corepack enable
-      #     pnpm --version
+      - name: Use Latest Corepack
+        run: |
+          echo "Before: corepack version => $(corepack --version || echo 'not installed')"
+          npm install -g corepack@latest
+          echo "After : corepack version => $(corepack --version)"
+          corepack enable
+          pnpm --version
       - uses: actions/setup-node@v4
         with:
           node-version: 22
           cache: pnpm
-          working-directory: ./vue
       - run: pnpm install
         working-directory: ./vue
       - run: pnpm lint
