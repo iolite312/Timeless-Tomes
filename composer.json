@@ -14,7 +14,8 @@
     "require": {
         "lcobucci/jwt": "^5.5",
         "ramsey/uuid": "^4.7",
-        "lcobucci/clock": "^3.3"
+        "lcobucci/clock": "^3.3",
+        "rakit/validation": "^1.4"
     },
     "require-dev": {
         "friendsofphp/php-cs-fixer": "^3.68"
