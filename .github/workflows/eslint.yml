@@ -25,6 +25,7 @@ jobs:
         with:
           node-version: 22
           cache: pnpm
+          working-directory: ./vue
       - run: pnpm install
         working-directory: ./vue
       - run: pnpm lint
