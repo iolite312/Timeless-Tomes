@@ -3,13 +3,13 @@
 namespace App\Middleware;
 
 use App\Application\Request;
-use App\Helpers\TokenValidator;
+use App\Helpers\TokenHelper;
 
 class EnsureInvalidLogin implements MiddlewareInterface
 {
     public function handle(): bool
     {
-        if (TokenValidator::isValid(Request::getAuthToken())) {
+        if (TokenHelper::isValid(Request::getAuthToken())) {
             return true;
         }
 

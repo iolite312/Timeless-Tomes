@@ -2,7 +2,6 @@
 
 namespace App\Controllers;
 
-use App\Application\Response;
 use App\Helpers\TokenGenerator;
 
 class AuthController extends Controller
