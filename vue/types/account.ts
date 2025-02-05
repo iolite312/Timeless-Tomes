@@ -13,8 +13,8 @@ export interface Login {
   password: string
 }
 export interface Register extends Login {
-  firstname: string,
-  lastname: string
+  first_name: string,
+  last_name: string
 }
 export interface UserResponse {
   status: number,
