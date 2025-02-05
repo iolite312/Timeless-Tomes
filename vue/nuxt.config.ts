@@ -12,9 +12,10 @@ export default defineNuxtConfig({
   modules: [
     '@nuxt/ui',
     '@pinia/nuxt',
+    'pinia-plugin-persistedstate/nuxt',
     '@vueuse/nuxt',
     '@nuxt/eslint',
-    'nuxt-meilisearch'
+    'nuxt-meilisearch',
   ],
   css: ['~/assets/css/main.css'],
   ssr: false,
@@ -22,11 +23,14 @@ export default defineNuxtConfig({
     serverBundle: "local"
   },
   vite: {
-    envDir: '../'
+    envDir: '../',
+    server: {
+      allowedHosts: true,
+    }
   },
   runtimeConfig: {
     public: {
-      MY_ENV: process.env.MY_ENV
+      BASE_URL: process.env.BASE_URL
     }
   },
   meilisearch: {
