@@ -44,22 +44,22 @@
 <script setup lang="ts">
 const items = ref([
   {
-    label: "Home",
-    icon: "i-material-symbols-home-outline-rounded",
-    to: "/",
+    label: 'Home',
+    icon: 'i-material-symbols-home-outline-rounded',
+    to: '/',
   },
   {
-    label: "Search",
-    icon: "i-material-symbols-search-rounded",
-    to: "/search",
+    label: 'Search',
+    icon: 'i-material-symbols-search-rounded',
+    to: '/search',
   },
 ]);
 const colorMode = useColorMode();
 
-const isDark = computed(() => colorMode.value === "dark");
+const isDark = computed(() => colorMode.value === 'dark');
 
 function toggleDarkMode() {
-  colorMode.preference = colorMode.value === "dark" ? "light" : "dark";
+  colorMode.preference = colorMode.value === 'dark' ? 'light' : 'dark';
 }
 </script>
 
