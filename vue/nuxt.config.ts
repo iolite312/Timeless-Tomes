@@ -34,5 +34,8 @@ export default defineNuxtConfig({
     }
   },
   meilisearch: {
+  },
+  piniaPluginPersistedstate: {
+    storage: 'localStorage'
   }
 })
