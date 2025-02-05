@@ -32,7 +32,7 @@ class AuthController extends Controller
         if ($validation->fails()) {
             return [
                 'status' => 422,
-                'errors' => $validation->errors()->toArray(),
+                'errors' => $validation->errors()->firstOfAll(),
             ];
         }
 
@@ -89,7 +89,7 @@ class AuthController extends Controller
         if (!$user || !password_verify($data['password'], $user->password)) {
             return [
                 'status' => 401,
-                'message' => 'Invalid credentials',
+                'error' => 'Invalid credentials',
             ];
         }
 
