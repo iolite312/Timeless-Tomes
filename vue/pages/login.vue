@@ -71,6 +71,10 @@ import * as z from 'zod';
 import type { FormSubmitEvent } from '@nuxt/ui';
 import type { Login } from '~/types';
 
+definePageMeta({
+  middleware: 'auth',
+});
+
 const items = [
   {
     label: 'Login',
