@@ -54,6 +54,7 @@ class AuthController extends Controller
 
         return [
             'status' => 201,
+            'user' => $user,
             'token' => $jwtToken,
         ];
     }
