@@ -28,7 +28,6 @@ export const useAccountStore = defineStore('account', () => {
 
   function login(data: Login): Promise<UserResponse> {
     return new Promise((resolve, reject) => {
-      console.log("Hi from below");
       axiosClient.post<UserResponse>('/login', data)
         .then((response) => {
           token.value = response.data.token
@@ -56,6 +55,10 @@ export const useAccountStore = defineStore('account', () => {
         account.value = null
       })
   }
+  function $reset() {
+    token.value = ''
+    account.value = null
+  }
 
-  return { account, token, fullname, isAuthenticated, register, login, autoLogin }
+  return { account, token, fullname, isAuthenticated, register, login, autoLogin, $reset }
 }, { persist: true })
