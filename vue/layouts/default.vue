@@ -1,7 +1,7 @@
 <template>
   <div>
     <HeaderComponent />
-    <div class="mx-12 flex items-center justify-center flex-col h-full">
+    <div class="mx-12 pt-12 flex items-center justify-center flex-col">
       <slot />
     </div>
   </div>
