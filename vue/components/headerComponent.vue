@@ -5,9 +5,25 @@
         <h1 class="text-2xl font-bold">Timeless Tomes</h1>
       </NuxtLink>
     </div>
-    <UNavigationMenu :items="items" class="hidden lg:flex" />
+    <UNavigationMenu :items="navbarItems" class="hidden lg:flex" />
     <div class="lg:flex-1 items-center justify-end flex gap-2">
-      <NuxtLink to="/login">
+      <UDropdownMenu
+        v-if="userStore.isAuthenticated"
+        arrow
+        :items="dropdownItems"
+        :ui="{
+          content: 'w-48',
+        }"
+      >
+        <UButton
+          icon="i-material-symbols-account-circle-full"
+          color="neutral"
+          variant="outline"
+          :label="userStore.fullname"
+        />
+      </UDropdownMenu>
+
+      <NuxtLink v-else to="/login">
         <UButton
           icon="i-material-symbols-account-circle-full"
           color="neutral"
@@ -34,7 +50,7 @@
       >
         <UButton icon="i-lucide-menu" color="neutral" variant="outline" />
         <template #body>
-          <UNavigationMenu orientation="vertical" :items="items" />
+          <UNavigationMenu orientation="vertical" :items="navbarItems" />
         </template>
       </USlideover>
     </div>
@@ -42,7 +58,7 @@
 </template>
 
 <script setup lang="ts">
-const items = ref([
+const navbarItems = ref([
   {
     label: 'Home',
     icon: 'i-material-symbols-home-outline-rounded',
@@ -54,7 +70,27 @@ const items = ref([
     to: '/search',
   },
 ]);
+
+const dropdownItems = ref([
+  [
+    {
+      label: 'Profile',
+      icon: 'i-material-symbols-account-circle-full',
+      to: '/profile',
+    },
+    {
+      label: 'Logout',
+      icon: 'i-material-symbols-exit-to-app-rounded',
+      type: 'checkbox' as const,
+      onUpdateChecked() {
+        userStore.$reset();
+        useRouter().push('/');
+      },
+    },
+  ],
+]);
 const colorMode = useColorMode();
+const userStore = useAccountStore();
 
 const isDark = computed(() => colorMode.value === 'dark');
 
