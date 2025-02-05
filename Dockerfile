@@ -1,7 +1,8 @@
 FROM node:jod AS build-stage
 WORKDIR /app
-COPY ./vue .
+COPY vue/package*.json ./
 RUN npm install
+COPY ./vue .
 RUN npm run generate
 
 FROM php:8.4-fpm-alpine
