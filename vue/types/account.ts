@@ -4,8 +4,21 @@ export interface Account {
   first_name: string,
   last_name: string,
   role: Role,
+  profile_picture: string,
   street?: string,
   city?: string,
+  postalcode?: string,
+}
+
+export interface Update {
+  first_name: string,
+  last_name: string,
+  email: string,
+  password: string,
+  profile_picture: string,
+  street?: string,
+  city?: string,
+  postalcode?: string,
 }
 
 export interface Login {

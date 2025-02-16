@@ -1,5 +1,5 @@
 import axiosClient from "~/axios"
-import type { Account, Login, Register, UserResponse } from "~/types"
+import type { Account, Login, Register, Update, UserResponse } from "~/types"
 
 export const useAccountStore = defineStore('account', () => {
   const account = ref<Account | null>(null)
@@ -35,6 +35,8 @@ export const useAccountStore = defineStore('account', () => {
           resolve(response.data)
         })
         .catch((error) => {
+          token.value = ''
+          account.value = null
           reject(error)
         })
     })
@@ -55,10 +57,27 @@ export const useAccountStore = defineStore('account', () => {
         account.value = null
       })
   }
+
+  function updateUser(user: Update) {
+    return new Promise((resolve, reject) => {
+      axiosClient.defaults.headers.common.Authorization = `Bearer ${token.value}`
+
+      axiosClient.post<UserResponse>('/profile/update', user)
+        .then((response) => {
+          token.value = response.data.token
+          account.value = response.data.user
+          resolve(response.data)
+        })
+        .catch((error) => {
+          reject(error)
+        })
+    })
+  }
+
   function $reset() {
     token.value = ''
     account.value = null
   }
 
-  return { account, token, fullname, isAuthenticated, register, login, autoLogin, $reset }
+  return { account, token, fullname, isAuthenticated, register, login, autoLogin, updateUser, $reset }
 }, { persist: true })
