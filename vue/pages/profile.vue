@@ -2,7 +2,8 @@
   <div>
     <h2 class="text-2xl font-bold mb-4">profile</h2>
     <UForm
-      ref="registerForm"
+      ref="profileForm"
+      :schema="profileSchema"
       :state="state"
       class="flex flex-col gap-4"
       @submit="updateUser"
@@ -62,7 +63,9 @@
 </template>
 
 <script setup lang="ts">
-import type { Account } from '~/types';
+import type { FormSubmitEvent } from '@nuxt/ui';
+import * as z from 'zod';
+import type { Account, Update } from '~/types';
 
 definePageMeta({
   middleware: 'auth',
@@ -89,9 +92,30 @@ const state = ref({
   postalcode: account.postalcode,
 });
 
-async function updateUser() {
+const profileForm = ref('profileForm');
+
+const profileSchema = z
+  .object({
+    first_name: z.string().min(1, 'First name is required'),
+    last_name: z.string().min(1, 'Last name is required'),
+    email: z.string().email('Invalid email format'),
+    password: z.string().optional(),
+    confirmPassword: z.string().optional(),
+    profile_picture: z.string().nullable(),
+    street: z.string().nullable(),
+    city: z.string().nullable(),
+    postalcode: z.string().nullable(),
+  })
+  .refine((data) => data.password === data.confirmPassword, {
+    message: 'Passwords must match',
+    path: ['confirmPassword'],
+  });
+
+type ProfileSchema = z.output<typeof profileSchema>;
+
+async function updateUser(event: FormSubmitEvent<ProfileSchema>) {
   userStore
-    .updateUser(state.value)
+    .updateUser(event.data as Update)
     .then(() => {
       toast.add({
         title: 'Success',
@@ -106,6 +130,7 @@ async function updateUser() {
         color: 'error',
       });
     });
+}
 }
 </script>
 
