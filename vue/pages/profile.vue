@@ -57,12 +57,26 @@
           </UFormField>
         </div>
       </div>
-      <UButton label="Update" type="submit" variant="solid" class="self-end" />
+      <UButton
+        label="Update"
+        type="submit"
+        variant="solid"
+        class="justify-around"
+      />
+      <UButton
+        label="Delete account"
+        variant="solid"
+        color="error"
+        class="justify-around"
+        type="button"
+        @click="warning"
+      />
     </UForm>
   </div>
 </template>
 
 <script setup lang="ts">
+import { DeletionModal } from '#components';
 import type { FormSubmitEvent } from '@nuxt/ui';
 import * as z from 'zod';
 import type { Account, Update } from '~/types';
@@ -73,6 +87,7 @@ definePageMeta({
 
 const userStore = useAccountStore();
 const toast = useToast();
+const modal = useModal();
 
 if (!userStore.account) {
   navigateTo('/login');
@@ -131,6 +146,26 @@ async function updateUser(event: FormSubmitEvent<ProfileSchema>) {
       });
     });
 }
+function warning() {
+  modal.open(DeletionModal, {
+    title: 'Are you sure you want to delete your account?',
+    description: 'This action cannot be undone',
+    onDeletion() {
+      userStore
+        .deleteAccount()
+        .then(() => {
+          useRouter().push('/');
+        })
+        .catch(() => {
+          toast.add({
+            title: 'Error',
+            description: 'Something went wrong',
+            color: 'error',
+          });
+        });
+      modal.close();
+    },
+  });
 }
 </script>
 

@@ -78,4 +78,28 @@ class ProfileController extends Controller
             'user' => $user->toArray(),
         ];
     }
+    public function delete()
+    {
+        $decodedToken = TokenHelper::decode(Request::getAuthToken());
+        $user = $this->userRepository->getUserByEmail($decodedToken->claims()->get('user')['email']);
+        if (!$user) {
+            return [
+                'status' => 404,
+                'message' => 'User not found',
+            ];
+        }
+        try {
+            $this->userRepository->deleteUser($user->id);
+        } catch (\Exception) {
+            return [
+                'status' => 500,
+                'message' => 'Something went wrong',
+            ];
+        }
+
+        return [
+            'status' => 200,
+            'message' => 'User deleted',
+        ];
+    }
 }

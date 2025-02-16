@@ -72,11 +72,28 @@ export const useAccountStore = defineStore('account', () => {
     })
   }
 
+  function deleteAccount() {
+    return new Promise((resolve, reject) => {
+      axiosClient.defaults.headers.common.Authorization = `Bearer ${token.value}`
+
+      axiosClient.post<UserResponse>('/profile/delete')
+        .then((response) => {
+          token.value = ""
+          account.value = null
+          $reset()
+          resolve(response.data)
+        })
+        .catch((error) => {
+          reject(error)
+        })
+    })
+  }
+
   function $reset() {
     token.value = ''
     account.value = null
     axiosClient.defaults.headers.common.Authorization = ''
   }
 
-  return { account, token, fullname, isAuthenticated, register, login, autoLogin, updateUser, $reset }
+  return { account, token, fullname, isAuthenticated, register, login, autoLogin, updateUser, deleteAccount, $reset }
 }, { persist: true })
