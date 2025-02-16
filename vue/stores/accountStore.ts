@@ -35,8 +35,6 @@ export const useAccountStore = defineStore('account', () => {
           resolve(response.data)
         })
         .catch((error) => {
-          token.value = ''
-          account.value = null
           reject(error)
         })
     })
@@ -77,6 +75,7 @@ export const useAccountStore = defineStore('account', () => {
   function $reset() {
     token.value = ''
     account.value = null
+    axiosClient.defaults.headers.common.Authorization = ''
   }
 
   return { account, token, fullname, isAuthenticated, register, login, autoLogin, updateUser, $reset }
