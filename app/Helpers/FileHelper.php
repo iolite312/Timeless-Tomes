@@ -6,7 +6,7 @@ use Ramsey\Uuid\Uuid;
 
 class FileHelper
 {
-    public static function saveFile($file): bool
+    public static function saveFile($file): string|bool
     {
         $base64String = $file;
         $data = explode(',', $base64String);
@@ -21,7 +21,7 @@ class FileHelper
                 $destination = "{$uploadDir}{$newAvatarName}";
 
                 if (file_put_contents($destination, $imageData)) {
-                    return true;
+                    return $newAvatarName;
                 } else {
                     return false;
                 }
@@ -35,7 +35,7 @@ class FileHelper
 
     public static function deleteFile($file)
     {
-        if ($file == 'placeholder.jpg') {
+        if ($file == 'profile_placeholder.png') {
             return;
         }
         $uploadDir = '/app/public/images/uploads/';

@@ -1,6 +1,10 @@
 <template>
   <div>
     <h2 class="text-2xl font-bold mb-4">profile</h2>
+    <ProfilePicture
+      :src="state.profile_picture"
+      @change-picture="changePicture"
+    />
     <UForm
       ref="profileForm"
       :schema="profileSchema"
@@ -165,6 +169,16 @@ function warning() {
         });
       modal.close();
     },
+  });
+}
+
+function changePicture(n: string) {
+  state.value.profile_picture = n;
+  toast.add({
+    title: 'Tip',
+    description: 'You can right click to change the position of the image',
+    icon: 'i-lucide-info',
+    color: 'info',
   });
 }
 </script>

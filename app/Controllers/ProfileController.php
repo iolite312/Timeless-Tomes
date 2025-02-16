@@ -3,6 +3,7 @@
 namespace App\Controllers;
 
 use App\Application\Request;
+use App\Helpers\FileHelper;
 use App\Helpers\TokenHelper;
 use App\Repositories\UserRepository;
 
@@ -55,7 +56,12 @@ class ProfileController extends Controller
         $user->street = $data['street'] ?? $user->street;
         $user->city = $data['city'] ?? $user->city;
         $user->postalcode = $data['postalcode'] ?? $user->postalcode;
-        $user->profile_picture = $data['profile_picture'] ?? $user->profile_picture;
+        if ($data['profile_picture']) {
+            $result = FileHelper::saveFile($data['profile_picture']);
+            if ($result) {
+                $user->profile_picture = $result;
+            }
+        }
         if ($data['password']) {
             $user->password = password_hash($data['password'], PASSWORD_DEFAULT);
         }
