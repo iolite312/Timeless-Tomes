@@ -16,7 +16,14 @@
         }"
       >
         <UButton
-          icon="i-material-symbols-account-circle-full"
+          :avatar="{
+            src:
+              useRuntimeConfig().public.BASE_URL +
+              '/images/' +
+              (userStore.account?.profile_picture === 'profile_placeholder.png'
+                ? userStore.account?.profile_picture
+                : 'uploads/' + userStore.account?.profile_picture),
+          }"
           color="neutral"
           variant="outline"
           :label="userStore.fullname"
@@ -68,6 +75,11 @@ const navbarItems = ref([
     label: 'Search',
     icon: 'i-material-symbols-search-rounded',
     to: '/search',
+  },
+  {
+    label: 'Protected',
+    icon: 'i-lucide-lock',
+    to: '/protected',
   },
 ]);
 

@@ -17,7 +17,7 @@ class UserRepository extends DatabaseRepository
 
     public function createUser(array $data): User
     {
-        $sql = 'INSERT INTO users (email, password, first_name, last_name, role) VALUES (:email, :password, :first_name, :last_name, :role)';
+        $sql = 'INSERT INTO users (email, password, first_name, last_name, role, profile_picture) VALUES (:email, :password, :first_name, :last_name, :role, :profile_picture)';
         $stmt = $this->pdo->prepare($sql);
         $stmt->execute([
             'email' => $data['email'],
@@ -25,6 +25,7 @@ class UserRepository extends DatabaseRepository
             'first_name' => $data['first_name'],
             'last_name' => $data['last_name'],
             'role' => RoleEnum::USER->value,
+            'profile_picture' => 'profile_placeholder.png',
         ]);
 
         $userId = $this->pdo->lastInsertId();
@@ -60,14 +61,15 @@ class UserRepository extends DatabaseRepository
 
     public function updateUser(User $user): bool
     {
-        $sql = 'UPDATE users SET email = :email, password = :password, first_name = :first_name, last_name = :last_name, role = :role, street = :street, city = :city, postalcode = :postalcode WHERE id = :id';
+        $sql = 'UPDATE users SET email = :email, password = :password, first_name = :first_name, last_name = :last_name, role = :role, profile_picture = :profile_picture, street = :street, city = :city, postalcode = :postalcode WHERE id = :id';
         $stmt = $this->pdo->prepare($sql);
         $stmt->execute([
             'email' => $user->email,
             'password' => $user->password,
             'first_name' => $user->first_name,
             'last_name' => $user->last_name,
-            'role' => $user->role,
+            'role' => $user->role->value,
+            'profile_picture' => $user->profile_picture,
             'street' => $user->street,
             'city' => $user->city,
             'postalcode' => $user->postalcode,

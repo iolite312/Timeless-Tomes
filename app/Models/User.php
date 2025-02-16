@@ -12,6 +12,7 @@ class User extends Model
     public string $first_name;
     public string $last_name;
     public RoleEnum $role;
+    public string $profile_picture;
     public ?string $street;
     public ?string $city;
     public ?string $postalcode;
@@ -27,6 +28,7 @@ class User extends Model
         $this->first_name = $data['first_name'];
         $this->last_name = $data['last_name'];
         $this->role = RoleEnum::from($data['role']);
+        $this->profile_picture = $data['profile_picture'];
         $this->street = $data['street'] ?? null;
         $this->city = $data['city'] ?? null;
         $this->postalcode = $data['postalcode'] ?? null;
