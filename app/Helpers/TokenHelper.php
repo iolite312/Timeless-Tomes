@@ -4,10 +4,10 @@ namespace App\Helpers;
 
 use App\Models\User;
 use Ramsey\Uuid\Uuid;
-use Lcobucci\JWT\Token;
 use Lcobucci\JWT\Token\Parser;
 use Lcobucci\Clock\SystemClock;
 use Lcobucci\JWT\Token\Builder;
+use Lcobucci\JWT\UnencryptedToken;
 use Lcobucci\JWT\Signer\Hmac\Sha256;
 use Lcobucci\JWT\Signer\Key\InMemory;
 use Lcobucci\JWT\Encoding\JoseEncoder;
@@ -69,13 +69,17 @@ class TokenHelper
         }
     }
 
-    public static function decode($encryptedToken): bool|Token
+    public static function decode($encryptedToken): bool|UnencryptedToken
     {
         $parser = new Parser(new JoseEncoder());
         try {
-            return $parser->parse(
+            $decodedToken = $parser->parse(
                 $encryptedToken
             );
+
+            assert($decodedToken instanceof UnencryptedToken);
+
+            return $decodedToken;
         } catch (CannotDecodeContent|InvalidTokenStructure|UnsupportedHeaderFound $e) {
             return false;
         }
