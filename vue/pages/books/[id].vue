@@ -4,7 +4,7 @@
       class="flex flex-col items-center md:items-start justify-center md:flex-row"
     >
       <NuxtImg
-        class="max-w-96 h-full lg:max-w-1/2 mr-4 my-4"
+        class="max-w-96 h-full lg:max-w-1/2 mr-4 my-4 rounded-md"
         :src="`${useRuntimeConfig().public.BASE_URL}/images/uploads/books/${
           data.book.picture
         }`"
@@ -20,6 +20,15 @@
               label="Add to cart"
               class="text-xl font-bold"
               icon="i-lucide-shopping-cart"
+              @click="addToCart()"
+            />
+            <UButton
+              v-else
+              color="neutral"
+              label="Add to cart"
+              class="text-xl font-bold"
+              icon="i-lucide-shopping-cart"
+              disabled
             />
           </div>
         </div>
@@ -34,6 +43,15 @@
             label="Add to cart"
             class="text-xl font-bold"
             icon="i-lucide-shopping-cart"
+            @click="addToCart()"
+          />
+          <UButton
+            v-else
+            color="neutral"
+            label="Add to cart"
+            class="text-xl font-bold"
+            icon="i-lucide-shopping-cart"
+            disabled
           />
         </div>
         <p class="whitespace-pre-wrap">
@@ -45,7 +63,7 @@
       <h3 class="text-2xl font-bold mb-4">Details</h3>
       <div class="flex flex-col md:flex-row md:gap-4">
         <NuxtImg
-          class="hidden md:block w-28"
+          class="hidden md:block w-28 rounded-md"
           :src="`${useRuntimeConfig().public.BASE_URL}/images/uploads/books/${
             data.book.picture
           }`"
@@ -59,7 +77,7 @@
         </div>
         <div>
           <hr class="my-2 md:mt-0" />
-          <p>Language : {{ data.book.language }}</p>
+          <p>Language: {{ data.book.language }}</p>
           <hr class="my-2" />
           <p>Genre: {{ data.book.genre.genres.join(', ') }}</p>
           <hr class="my-2" />
@@ -72,10 +90,27 @@
 <script lang="ts" setup>
 import { NuxtImg, UButton } from '#components';
 import axiosClient from '~/axios';
-import type { BookResponse } from '~/types';
+import type { Book, BookResponse, CartItem } from '~/types';
 
 const id = useRoute().params.id;
 const { data } = await axiosClient.get<BookResponse>(`/books/${id}`);
+const accountStore = useAccountStore();
+const toast = useToast();
+
+function addToCart() {
+  accountStore.addToCart(convertToCart(data.book, 1));
+  toast.add({
+    title: 'Success',
+    description: 'Book added to cart',
+    color: 'success',
+  });
+}
+function convertToCart(book: Book, quantity: number): CartItem {
+  return {
+    ...book,
+    quantity,
+  };
+}
 </script>
 
 <style scoped></style>

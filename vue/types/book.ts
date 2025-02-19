@@ -17,6 +17,10 @@ export interface Genre {
   genres: string[];
 }
 
+export interface CartItem extends Book {
+  quantity: number;
+}
+
 export interface BookResponse {
   status: number;
   book: Book;
