@@ -39,22 +39,6 @@ export const useAccountStore = defineStore('account', () => {
         })
     })
   }
-  function autoLogin() {
-    if (!token.value) {
-      return
-    }
-
-    axiosClient.defaults.headers.common.Authorization = `Bearer ${token.value}`
-
-    axiosClient.get<UserResponse>('/me')
-      .then((response) => {
-        account.value = response.data.user
-      })
-      .catch(() => {
-        token.value = ''
-        account.value = null
-      })
-  }
 
   function updateUser(user: Update) {
     return new Promise((resolve, reject) => {
