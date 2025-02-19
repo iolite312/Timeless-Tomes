@@ -6,6 +6,8 @@ use App\Middleware\EnsureInvalidLogin;
 
 $router = Router::getInstance();
 
+$router->get('/api/books/{id}', [App\Controllers\ProductController::class, 'show']);
+
 // Routes
 $router->middleware(EnsureInvalidLogin::class, function () use ($router) {
     $router->get('/api', [App\Controllers\HomeController::class, 'index']);
