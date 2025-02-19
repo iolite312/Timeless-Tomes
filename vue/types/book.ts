@@ -5,16 +5,12 @@ export interface Book {
   picture: string;
   author: string;
   language: string;
-  genre: Genre;
+  genre: string[];
   isbn: string;
   price: number;
   stock: number;
   seller_id: number;
   seller_name: string;
-}
-
-export interface Genre {
-  genres: string[];
 }
 
 export interface CartItem extends Book {

@@ -27,7 +27,7 @@ class Book extends Model
         $this->picture = $data['picture'];
         $this->author = $data['author'];
         $this->language = $data['language'];
-        $this->genre = json_decode($data['genre'], true);
+        $this->genre = json_decode($data['genre'], true)["genres"];
         $this->isbn = $data['isbn'];
         $this->price = $data['price'];
         $this->stock = $data['stock'];

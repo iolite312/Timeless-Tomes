@@ -79,7 +79,7 @@
           <hr class="my-2 md:mt-0" />
           <p>Language: {{ data.book.language }}</p>
           <hr class="my-2" />
-          <p>Genre: {{ data.book.genre.genres.join(', ') }}</p>
+          <p>Genre: {{ data.book.genre.join(', ') }}</p>
           <hr class="my-2" />
         </div>
       </div>
