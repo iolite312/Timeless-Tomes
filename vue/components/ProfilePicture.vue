@@ -45,7 +45,7 @@ function updateImage() {
       '/images/' +
       (props.src === 'profile_placeholder.png'
         ? props.src
-        : 'uploads/' + props.src);
+        : 'uploads/profile/' + props.src);
     oldImage.value = newImage.value;
   } else {
     newImage.value = props.src;

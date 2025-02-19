@@ -22,7 +22,7 @@
               '/images/' +
               (userStore.account?.profile_picture === 'profile_placeholder.png'
                 ? userStore.account?.profile_picture
-                : 'uploads/' + userStore.account?.profile_picture),
+                : 'uploads/profile/' + userStore.account?.profile_picture),
           }"
           color="neutral"
           variant="outline"

@@ -57,8 +57,9 @@ class ProfileController extends Controller
         $user->city = $data['city'] ?? $user->city;
         $user->postalcode = $data['postalcode'] ?? $user->postalcode;
         if ($data['profile_picture']) {
-            $result = FileHelper::saveFile($data['profile_picture']);
+            $result = FileHelper::saveFile($data['profile_picture'], 'profile');
             if ($result) {
+                FileHelper::deleteFile($user->profile_picture, 'profile');
                 $user->profile_picture = $result;
             }
         }
