@@ -7,7 +7,9 @@ class Book extends Model
     public int $id;
     public string $title;
     public string $description;
+    public string $picture;
     public string $author;
+    public string $language;
     public array $genre;
     public int $isbn;
     public float $price;
@@ -22,7 +24,9 @@ class Book extends Model
         $this->id = $data['id'];
         $this->title = $data['title'];
         $this->description = $data['description'];
+        $this->picture = $data['picture'];
         $this->author = $data['author'];
+        $this->language = $data['language'];
         $this->genre = json_decode($data['genre'], true);
         $this->isbn = $data['isbn'];
         $this->price = $data['price'];
