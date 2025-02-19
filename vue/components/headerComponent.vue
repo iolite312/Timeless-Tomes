@@ -37,6 +37,25 @@
           variant="ghost"
         />
       </NuxtLink>
+      <NuxtLink to="/cart">
+        <UChip
+          v-if="userStore.cartCount > 0"
+          :text="userStore.cartCount"
+          size="3xl"
+        >
+          <UButton
+            icon="i-lucide-shopping-basket"
+            color="neutral"
+            variant="outline"
+          />
+        </UChip>
+        <UButton
+          v-else
+          icon="i-lucide-shopping-basket"
+          color="neutral"
+          variant="outline"
+        />
+      </NuxtLink>
       <ClientOnly v-if="!colorMode?.forced">
         <UButton
           :icon="isDark ? 'i-lucide-moon' : 'i-lucide-sun'"
@@ -65,6 +84,8 @@
 </template>
 
 <script setup lang="ts">
+import { UChip } from '#components';
+
 const navbarItems = ref([
   {
     label: 'Home',
