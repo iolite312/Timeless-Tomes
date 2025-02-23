@@ -31,7 +31,8 @@ export default defineNuxtConfig({
   },
   runtimeConfig: {
     public: {
-      BASE_URL: process.env.BASE_URL
+      BASE_URL: process.env.BASE_URL,
+      STRIPE_PUBLIC_KEY: process.env.STRIPE_PUBLIC_KEY
     }
   },
   meilisearch: {
