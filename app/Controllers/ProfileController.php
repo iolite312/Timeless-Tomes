@@ -2,8 +2,8 @@
 
 namespace App\Controllers;
 
-use App\Application\Request;
 use App\Helpers\FileHelper;
+use App\Application\Request;
 use App\Helpers\TokenHelper;
 use App\Repositories\UserRepository;
 
@@ -85,6 +85,7 @@ class ProfileController extends Controller
             'user' => $user->toArray(),
         ];
     }
+
     public function delete()
     {
         $decodedToken = TokenHelper::decode(Request::getAuthToken());
