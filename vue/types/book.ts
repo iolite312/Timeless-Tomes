@@ -22,4 +22,13 @@ export interface BookResponse {
   book: Book;
 }
 
+export interface Order {
+  first_name: string;
+  last_name: string;
+  street: string;
+  city: string;
+  postalcode: string;
+  orderlines: CartItem[];
+}
+
 
