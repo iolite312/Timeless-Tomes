@@ -21,7 +21,7 @@ class Book extends Model
 
     public function __construct(array $data)
     {
-        $this->id = $data['id'];
+        $this->id = $data['id'] ?? $data['book_id'];
         $this->title = $data['title'];
         $this->description = $data['description'];
         $this->picture = $data['picture'];
@@ -30,7 +30,7 @@ class Book extends Model
         $this->genre = json_decode($data['genre'], true);
         $this->isbn = $data['isbn'];
         $this->price = $data['price'];
-        $this->stock = $data['stock'];
+        $this->stock = $data['stock'] ?? 0;
         $this->seller_id = $data['seller_id'];
         $this->seller_name = $data['seller_name'] ?? null;
     }

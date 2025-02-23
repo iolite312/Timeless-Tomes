@@ -16,6 +16,7 @@ class User extends Model
     public ?string $street;
     public ?string $city;
     public ?string $postalcode;
+    public string $stripe_customer;
     public string $created_at;
 
     public array $hidden = ['password'];
@@ -32,6 +33,7 @@ class User extends Model
         $this->street = $data['street'] ?? null;
         $this->city = $data['city'] ?? null;
         $this->postalcode = $data['postalcode'] ?? null;
+        $this->stripe_customer = $data['stripe_customer'];
         $this->created_at = $data['created_at'];
     }
 }
