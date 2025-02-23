@@ -1,3 +1,4 @@
+<!-- eslint-disable vue/html-self-closing -->
 <template>
   <div class="xl:max-w-3/4">
     <div
