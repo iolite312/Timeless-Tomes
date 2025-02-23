@@ -37,7 +37,7 @@
           variant="ghost"
         />
       </NuxtLink>
-      <NuxtLink to="/cart">
+      <NuxtLink v-if="userStore.isAuthenticated" to="/cart">
         <UChip
           v-if="userStore.cartCount > 0"
           :text="userStore.cartCount"
