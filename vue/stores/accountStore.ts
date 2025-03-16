@@ -69,7 +69,7 @@ export const useAccountStore = defineStore('account', () => {
     return new Promise((resolve, reject) => {
       axiosClient.defaults.headers.common.Authorization = `Bearer ${token.value}`
 
-      axiosClient.post<UserResponse>('/profile/update', user)
+      axiosClient.put<UserResponse>('/profile/update', user)
         .then((response) => {
           token.value = response.data.token
           account.value = response.data.user
@@ -85,7 +85,7 @@ export const useAccountStore = defineStore('account', () => {
     return new Promise((resolve, reject) => {
       axiosClient.defaults.headers.common.Authorization = `Bearer ${token.value}`
 
-      axiosClient.post<UserResponse>('/profile/delete')
+      axiosClient.delete<UserResponse>('/profile/delete')
         .then((response) => {
           token.value = ""
           account.value = null

@@ -37,6 +37,16 @@ class Router
         $this->routes[] = $this->constructRoute($uri, 'POST', $callback);
     }
 
+    public function put($uri, $callback)
+    {
+        $this->routes[] = $this->constructRoute($uri, 'PUT', $callback);
+    }
+
+    public function delete($uri, $callback)
+    {
+        $this->routes[] = $this->constructRoute($uri, 'DELETE', $callback);
+    }
+
     public function middleware(mixed $middlewareClass, callable $routesGroup, array $params = [])
     {
         $this->middlewares = new $middlewareClass(...$params);
