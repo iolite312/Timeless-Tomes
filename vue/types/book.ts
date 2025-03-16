@@ -13,7 +13,8 @@ export interface Book {
   seller_name: string;
 }
 
-export interface CartItem extends Book {
+export interface CartItem {
+  id: number;
   quantity: number;
 }
 

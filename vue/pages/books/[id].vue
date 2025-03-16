@@ -91,7 +91,7 @@
 <script lang="ts" setup>
 import { NuxtImg, UButton } from '#components';
 import axiosClient from '~/axios';
-import type { Book, BookResponse, CartItem } from '~/types';
+import type { BookResponse, CartItem } from '~/types';
 
 const id = useRoute().params.id;
 const { data } = await axiosClient.get<BookResponse>(`/books/${id}`);
@@ -99,16 +99,16 @@ const accountStore = useAccountStore();
 const toast = useToast();
 
 function addToCart() {
-  accountStore.addToCart(convertToCart(data.book, 1));
+  accountStore.addToCart(convertToCart(data.book.id, 1));
   toast.add({
     title: 'Success',
     description: 'Book added to cart',
     color: 'success',
   });
 }
-function convertToCart(book: Book, quantity: number): CartItem {
+function convertToCart(id: number, quantity: number): CartItem {
   return {
-    ...book,
+    id,
     quantity,
   };
 }
