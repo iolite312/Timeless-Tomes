@@ -13,20 +13,23 @@
         }`"
       />
     </NuxtLink>
-    <h3 class="text-2xl font-bold">{{ book.title }}</h3>
-    <UInputNumber
-      v-model="count"
-      :default-value="1"
-      :min="1"
-      class="w-32"
-      @change="updateCart"
-    />
-    <p class="font-bold">
-      {{ count }} x €{{ book.price.toFixed(2) }}: €{{
-        (book.price * count).toFixed(2)
-      }}
-    </p>
-    <div class="flex flex-row items-center gap-4"></div>
+    <div
+      class="flex flex-col md:flex-row md:grow items-center md:items-start justify-between gap-2"
+    >
+      <h3 class="text-2xl font-bold">{{ book.title }}</h3>
+      <UInputNumber
+        v-model="count"
+        :default-value="1"
+        :min="1"
+        class="w-32"
+        @change="updateCart"
+      />
+      <p class="font-bold">
+        {{ count }} x €{{ book.price.toFixed(2) }}: €{{
+          (book.price * count).toFixed(2)
+        }}
+      </p>
+    </div>
   </div>
 </template>
 

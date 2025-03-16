@@ -1,9 +1,9 @@
 <template>
-  <div class="flex flex-row w-full gap-4">
-    <div class="w-3/4 flex flex-col gap-4">
+  <div class="flex flex-col lg:flex-row w-full gap-4">
+    <div class="w-full lg:w-3/4 flex flex-col gap-4">
       <BookCard v-for="book in bookData" :key="book.id" :book="book" />
     </div>
-    <div class="w-1/4">
+    <div class="w-full lg:w-1/4">
       <p class="text-2xl font-bold">Total: €{{ total.toFixed(2) }}</p>
     </div>
   </div>
