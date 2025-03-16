@@ -33,6 +33,19 @@ export const useAccountStore = defineStore('account', () => {
     cart.value.push(book)
   }
 
+  
+  function updateQuantity(id: number, quantity: number) {
+    cart.value = cart.value.map((item) => {
+      if (item.id === id) {
+        return {
+          ...item,
+          quantity,
+        }
+      }
+      return item
+    })
+  }
+
   function removeFromCart(id: number) {
     cart.value = cart.value.filter((item) => item.id !== id)
   }
@@ -104,5 +117,5 @@ export const useAccountStore = defineStore('account', () => {
     axiosClient.defaults.headers.common.Authorization = ''
   }
 
-  return { account, token, fullname, isAuthenticated, cart, cartCount, addToCart, removeFromCart, register, login, updateUser, deleteAccount, $reset }
+  return { account, token, fullname, isAuthenticated, cart, cartCount, addToCart, updateQuantity, removeFromCart, register, login, updateUser, deleteAccount, $reset }
 }, { persist: true })
