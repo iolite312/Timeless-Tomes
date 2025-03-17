@@ -86,4 +86,32 @@ class CartController extends Controller
                 echo 'Received unknown event type ' . $event->type;
         }
     }
+
+    public function checkAvailability()
+    {
+        $json = file_get_contents('php://input');
+        $json = json_decode($json, true);
+        try {
+            $availability = $this->orderRepository->checkAvailability($json);
+        } catch (\Exception) {
+            return [
+                'status' => 500,
+                'message' => 'Something went wrong',
+            ];
+        }
+
+        $hasUnavailableBooks = false;
+        foreach ($availability as $book) {
+            if ($book['availability'] < 0) {
+
+                $hasUnavailableBooks = true;
+                break;
+            }
+        }
+
+        return [
+            'status' => $hasUnavailableBooks ? 400 : 200,
+            'message' => $availability,
+        ];
+    }
 }

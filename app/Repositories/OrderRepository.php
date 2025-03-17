@@ -120,4 +120,24 @@ class OrderRepository extends DatabaseRepository
             'id' => $orderId,
         ]);
     }
+
+    public function checkAvailability(array $data): array
+    {
+        $availablity = [];
+        foreach ($data['orderlines'] as $orderline) {
+            $sql = 'SELECT stock - :quantity AS availability FROM books WHERE id = :book_id';
+            $stmt = $this->pdo->prepare($sql);
+            $stmt->execute([
+                'quantity' => $orderline['quantity'],
+                'book_id' => $orderline['id'],
+            ]);
+            $result = $stmt->fetch(\PDO::FETCH_ASSOC);
+            $availablity[] = [
+                'id' => $orderline['id'],
+                'availability' => $result['availability'],
+            ];
+        }
+
+        return $availablity;
+    }
 }
