@@ -1,5 +1,5 @@
 import axiosClient from "~/axios"
-import type { Account, CartItem, Login, Register, Update, UserResponse } from "~/types"
+import type { Account, CartItem, CreateOrder, Login, Order, OrderResponse, Register, Update, UserResponse } from "~/types"
 
 export const useAccountStore = defineStore('account', () => {
   const account = ref<Account | null>(null)
@@ -33,7 +33,7 @@ export const useAccountStore = defineStore('account', () => {
     cart.value.push(book)
   }
 
-  
+
   function updateQuantity(id: number, quantity: number) {
     cart.value = cart.value.map((item) => {
       if (item.id === id) {
@@ -48,6 +48,20 @@ export const useAccountStore = defineStore('account', () => {
 
   function removeFromCart(id: number) {
     cart.value = cart.value.filter((item) => item.id !== id)
+  }
+
+  function checkAvailability(orderData: CreateOrder): Promise<OrderResponse> {
+    axiosClient.defaults.headers.common.Authorization = `Bearer ${token.value}`
+    return new Promise((resolve, reject) => {
+      let order: Order = { ...orderData, orderlines: cart.value }
+      axiosClient.post<OrderResponse>('/cart/availability', order)
+        .then((response) => {
+          resolve(response.data)
+        })
+        .catch((error) => {
+          reject(error)
+        })
+    })
   }
 
   function register(data: Register): Promise<UserResponse> {
@@ -117,5 +131,5 @@ export const useAccountStore = defineStore('account', () => {
     axiosClient.defaults.headers.common.Authorization = ''
   }
 
-  return { account, token, fullname, isAuthenticated, cart, cartCount, addToCart, updateQuantity, removeFromCart, register, login, updateUser, deleteAccount, $reset }
+  return { account, token, fullname, isAuthenticated, cart, cartCount, addToCart, updateQuantity, removeFromCart, checkAvailability, register, login, updateUser, deleteAccount, $reset }
 }, { persist: true })

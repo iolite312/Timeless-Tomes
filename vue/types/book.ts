@@ -23,13 +23,21 @@ export interface BookResponse {
   book: Book;
 }
 
-export interface Order {
+export interface CreateOrder {
   first_name: string;
   last_name: string;
   street: string;
   city: string;
   postalcode: string;
+}
+
+export interface Order extends CreateOrder {
   orderlines: CartItem[];
+}
+
+export interface OrderResponse {
+  status: number;
+  message: string | Array<CartItem>;
 }
 
 
