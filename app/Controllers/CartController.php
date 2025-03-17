@@ -8,7 +8,7 @@ use App\Helpers\StripeHelper;
 use App\Enums\PaymentStatusEnum;
 use App\Repositories\OrderRepository;
 
-class StripeController extends Controller
+class CartController extends Controller
 {
     private OrderRepository $orderRepository;
     private StripeHelper $stripeHelper;
