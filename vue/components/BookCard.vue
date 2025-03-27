@@ -29,6 +29,7 @@
           (book.price * count).toFixed(2)
         }}
       </p>
+      <UButton icon="i-lucide-trash-2" color="error" @click="removeFromCart" />
     </div>
   </div>
 </template>
@@ -43,6 +44,8 @@ const props = defineProps({
   },
 });
 
+const emit = defineEmits(['removeFromCart']);
+
 const count = ref(
   useAccountStore().cart.find((item) => item.id === props.book.id)?.quantity ||
     1
@@ -50,6 +53,11 @@ const count = ref(
 
 function updateCart() {
   useAccountStore().updateQuantity(props.book.id, count.value);
+}
+
+function removeFromCart() {
+  useAccountStore().removeFromCart(props.book.id);
+  emit('removeFromCart');
 }
 </script>
 

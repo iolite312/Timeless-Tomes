@@ -1,7 +1,12 @@
 <template>
   <div class="flex flex-col lg:flex-row w-full gap-4">
     <div class="w-full lg:w-3/4 flex flex-col gap-4">
-      <BookCard v-for="book in bookData" :key="book.id" :book="book" />
+      <BookCard
+        v-for="book in bookData"
+        :key="book.id"
+        :book="book"
+        @remove-from-cart="renderCart()"
+      />
     </div>
     <div class="w-full lg:w-1/4 flex flex-col gap-4">
       <div class="flex flex-col gap-2">
@@ -67,9 +72,8 @@ const bookData = ref<Book[]>([]);
 const accountStore = useAccountStore();
 const orderStore = useOrderStore();
 
-accountStore.cart.forEach(async (element) => {
-  const { data } = await axiosClient.get<BookResponse>(`/books/${element.id}`);
-  bookData.value.push(data.book);
+onBeforeMount(() => {
+  renderCart();
 });
 
 const total = computed(() => {
@@ -119,6 +123,15 @@ function checkAvailability(event: FormSubmitEvent<OrderSchema>) {
     .catch((error) => {
       console.log(error);
     });
+}
+function renderCart() {
+  bookData.value = [];
+  accountStore.cart.forEach(async (element) => {
+    const { data } = await axiosClient.get<BookResponse>(
+      `/books/${element.id}`
+    );
+    bookData.value.push(data.book);
+  });
 }
 </script>
 
