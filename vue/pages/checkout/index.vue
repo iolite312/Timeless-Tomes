@@ -10,7 +10,6 @@
       </UButton>
       <div id="payment-message" class="hidden" />
     </form>
-    <UButton @click="initialize">trigger</UButton>
   </div>
 </template>
 
@@ -27,6 +26,7 @@ onBeforeMount(() => {
   loadStripe(useRuntimeConfig().public.STRIPE_PUBLIC_KEY).then((stripe) => {
     if (stripe) {
       stripeClient = stripe;
+      initialize();
     }
   });
 });
@@ -39,7 +39,8 @@ let elements: StripeElements;
 
 // Fetches a payment intent and captures the client secret
 function initialize() {
-  const clientSecret = '';
+  const clientSecret = useOrderStore().clientSecret;
+  useAccountStore().cart = [];
 
   elements = stripeClient.elements({ clientSecret: clientSecret });
 
@@ -52,7 +53,6 @@ function initialize() {
 }
 
 async function handleSubmit(e: Event) {
-  console.log('OLA');
   e.preventDefault();
 
   const { error } = await stripeClient.confirmPayment({
@@ -69,20 +69,6 @@ async function handleSubmit(e: Event) {
     // showMessage('An unexpected error occurred.');
   }
 }
-
-// ------- UI helpers -------
-
-// function showMessage(messageText) {
-//   const messageContainer = document.querySelector('#payment-message');
-
-//   messageContainer.classList.remove('hidden');
-//   messageContainer.textContent = messageText;
-
-//   setTimeout(function () {
-//     messageContainer.classList.add('hidden');
-//     messageContainer.textContent = '';
-//   }, 4000);
-// }
 </script>
 
 <style scoped></style>
