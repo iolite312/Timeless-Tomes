@@ -105,8 +105,16 @@ function checkAvailability(event: FormSubmitEvent<OrderSchema>) {
   accountStore
     .checkAvailability(data)
     .then((response) => {
-      // orderStore.createOrder(data);
-      console.log(response);
+      if (response.status === 200) {
+        orderStore
+          .createOrder(data)
+          .then((response) => {
+            navigateTo('/checkout');
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+      }
     })
     .catch((error) => {
       console.log(error);
