@@ -28,7 +28,7 @@ class CartController extends Controller
         try {
             $order = $this->orderRepository->createOrder($json, $userid);
         } catch (\Exception) {
-            [
+            return [
                 'status' => 500,
                 'message' => 'Something went wrong',
             ];
