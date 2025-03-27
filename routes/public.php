@@ -19,6 +19,6 @@ $router->middleware(EnsureValidLogin::class, function () use ($router) {
     $router->get('/api/profile', [App\Controllers\ProfileController::class, 'index']);
     $router->put('/api/profile/update', [App\Controllers\ProfileController::class, 'update']);
     $router->delete('/api/profile/delete', [App\Controllers\ProfileController::class, 'delete']);
-    $router->post('/api/cart/create', [App\Controllers\CartController::class, 'createIntent']);
     $router->post('/api/cart/availability', [App\Controllers\CartController::class, 'checkAvailability']);
+    $router->post('/api/cart/create', [App\Controllers\CartController::class, 'createIntent']);
 });

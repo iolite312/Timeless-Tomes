@@ -39,7 +39,7 @@ class CartController extends Controller
                 'message' => 'Order could not be created',
             ];
         }
-        $amount = StripeHelper::calculateOrderAmount($json['orderlines']);
+        $amount = StripeHelper::calculateOrderAmount($order->order_lines);
         $intent = $this->stripeHelper->createIntent($amount, $order->id, $stripe_customer);
 
         return [
@@ -102,7 +102,7 @@ class CartController extends Controller
 
         $hasUnavailableBooks = false;
         foreach ($availability as $book) {
-            if ($book['availability'] < 0) {
+            if (!$book['availability']) {
 
                 $hasUnavailableBooks = true;
                 break;

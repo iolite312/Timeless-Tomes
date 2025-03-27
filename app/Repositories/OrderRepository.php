@@ -24,7 +24,7 @@ class OrderRepository extends DatabaseRepository
         $order = $stmt->fetch(\PDO::FETCH_ASSOC);
         if ($order) {
             $tempOrder = new Order($order);
-            $tempOrder->orderlines = $this->getOrderlinesByOrderId($id);
+            $tempOrder->order_lines = $this->getOrderlinesByOrderId($id);
 
             return $tempOrder;
         }
@@ -42,7 +42,7 @@ class OrderRepository extends DatabaseRepository
         if ($orders) {
             foreach ($orders as $order) {
                 $tempOrder = new Order($order);
-                $tempOrder->orderlines = $this->getOrderlinesByOrderId($order['id']);
+                $tempOrder->order_lines = $this->getOrderlinesByOrderId($order['id']);
                 $orderArray[] = $tempOrder;
             }
         }
@@ -64,7 +64,6 @@ class OrderRepository extends DatabaseRepository
         foreach ($orderlines as $orderline) {
             $orderLinesArray[] = new OrderLine($orderline);
         }
-
         return $orderLinesArray;
     }
 
@@ -90,6 +89,11 @@ class OrderRepository extends DatabaseRepository
                     'order_id' => $orderId,
                     'book_id' => $orderline['id'],
                     'quantity' => $orderline['quantity'],
+                ]);
+                $sql = 'UPDATE books SET stock = stock - 1 WHERE id = :id';
+                $stmt = $this->pdo->prepare($sql);
+                $stmt->execute([
+                    'id' => $orderline['id'],
                 ]);
             }
             $this->pdo->commit();
@@ -134,7 +138,7 @@ class OrderRepository extends DatabaseRepository
             $result = $stmt->fetch(\PDO::FETCH_ASSOC);
             $availablity[] = [
                 'id' => $orderline['id'],
-                'availability' => $result['availability'],
+                'availability' => $result['availability'] >= 0,
             ];
         }
 

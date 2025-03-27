@@ -51,7 +51,10 @@ class StripeHelper
         $amount = 0;
 
         foreach ($items as $item) {
-            $amount += $item['price'] * $item['quantity'];
+            /**
+             * @var \App\Models\OrderLine $item
+             */
+            $amount += $item->book->price * $item->quantity;
         }
 
         return intval(number_format($amount, 2, '', ''));
