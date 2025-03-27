@@ -109,7 +109,23 @@ const dropdownItems = ref([
     {
       label: 'Profile',
       icon: 'i-material-symbols-account-circle-full',
-      to: '/profile',
+      children: [
+        {
+          label: 'Home',
+          icon: 'i-material-symbols-home-outline-rounded',
+          to: '/profile',
+        },
+        {
+          label: 'Manage',
+          icon: 'i-material-symbols-edit-square-outline-rounded',
+          to: '/profile/manage',
+        },
+        {
+          label: 'Orders',
+          icon: 'i-mdi-paper-text',
+          to: '/profile/orders',
+        },
+      ],
     },
     {
       label: 'Logout',

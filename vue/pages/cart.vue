@@ -112,7 +112,7 @@ function checkAvailability(event: FormSubmitEvent<OrderSchema>) {
       if (response.status === 200) {
         orderStore
           .createOrder(data)
-          .then((response) => {
+          .then(() => {
             navigateTo('/checkout');
           })
           .catch((error) => {

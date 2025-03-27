@@ -5,15 +5,18 @@ namespace App\Controllers;
 use App\Helpers\FileHelper;
 use App\Application\Request;
 use App\Helpers\TokenHelper;
+use App\Repositories\OrderRepository;
 use App\Repositories\UserRepository;
 
 class ProfileController extends Controller
 {
     private UserRepository $userRepository;
+    private OrderRepository $orderRepository;
 
     public function __construct()
     {
         $this->userRepository = new UserRepository();
+        $this->orderRepository = new OrderRepository();
     }
 
     public function index()
@@ -108,6 +111,32 @@ class ProfileController extends Controller
         return [
             'status' => 200,
             'message' => 'User deleted',
+        ];
+    }
+
+    public function getAllOrders()
+    {
+        $decodedToken = TokenHelper::decode(Request::getAuthToken());
+        $user = $this->userRepository->getUserByEmail($decodedToken->claims()->get('user')['email']);
+        if (!$user) {
+            return [
+                'status' => 404,
+                'message' => 'User not found',
+            ];
+        }
+        try {
+            $orders = $this->orderRepository->getOrdersByUserId($user->id);
+        } catch (\Exception) {
+            return [
+                'status' => 500,
+                'message' => 'Something went wrong',
+            ];
+        }
+        return [
+            'status' => 200,
+            'orders' => $orders ? array_map(function ($order) {
+                return $order->toArray();
+            }, $orders) : [],
         ];
     }
 }

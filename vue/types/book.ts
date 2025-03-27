@@ -16,6 +16,7 @@ export interface Book {
 export interface CartItem {
   id: number;
   quantity: number;
+  book?: Book | null;
 }
 
 export interface BookResponse {
@@ -32,12 +33,20 @@ export interface CreateOrder {
 }
 
 export interface Order extends CreateOrder {
-  orderlines: CartItem[];
+  id?: number;
+  payment_status?: string;
+  order_lines: CartItem[];
+}
+
+export enum PaymentStatus {
+  COMPLETED = 'completed',
+  PENDING = 'pending',
+  FAILED = 'failed',
 }
 
 export interface OrderResponse {
   status: number;
-  message: string | Array<CartItem>;
+  message: string | Array<CartItem | Order>;
 }
 
 

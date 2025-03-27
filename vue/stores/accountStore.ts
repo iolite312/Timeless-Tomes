@@ -53,7 +53,7 @@ export const useAccountStore = defineStore('account', () => {
   function checkAvailability(orderData: CreateOrder): Promise<OrderResponse> {
     axiosClient.defaults.headers.common.Authorization = `Bearer ${token.value}`
     return new Promise((resolve, reject) => {
-      let order: Order = { ...orderData, orderlines: cart.value }
+      const order: Order = { ...orderData, orderlines: cart.value }
       axiosClient.post<OrderResponse>('/cart/availability', order)
         .then((response) => {
           resolve(response.data)
