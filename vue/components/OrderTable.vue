@@ -192,7 +192,7 @@
                       {
                         completed: 'success',
                         pending: 'warning',
-                        cancelled: 'error',
+                        failed: 'error',
                       }[row.original!.payment_status as string]
                     "
                     >{{ row.original.payment_status }}</UBadge
@@ -260,7 +260,7 @@ const columns: TableColumn<Order>[] = [
       const color = {
         completed: 'success' as const,
         pending: 'warning' as const,
-        cancelled: 'error' as const,
+        failed: 'error' as const,
       }[statusValue];
 
       return h(
