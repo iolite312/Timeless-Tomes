@@ -10,6 +10,11 @@ export interface Account {
   postalcode?: string,
 }
 
+export interface AccountResponse {
+  status: number,
+  users: Account[],
+}
+
 export interface Update {
   first_name: string,
   last_name: string,
