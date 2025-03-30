@@ -1,3 +1,48 @@
+<template>
+  <div class="flex-1 divide-y divide-(--ui-border-accented) w-full">
+    <div class="flex items-center gap-2 px-4 py-3.5 overflow-x-auto">
+      <UInput
+        :model-value="(table?.tableApi?.getColumn('name')?.getFilterValue() as string)"
+        class="max-w-sm min-w-[12ch]"
+        placeholder="Filter on name..."
+        @update:model-value="
+          table?.tableApi?.getColumn('name')?.setFilterValue($event)
+        "
+      />
+
+      <UDropdownMenu
+        :items="table?.tableApi?.getAllColumns().filter(column => column.getCanHide()).map(column => ({
+          label: upperFirst(column.id),
+          type: 'checkbox' as const,
+          checked: column.getIsVisible(),
+          onUpdateChecked(checked: boolean) {
+            table?.tableApi?.getColumn(column.id)?.toggleVisibility(!!checked)
+          },
+          onSelect(e?: Event) {
+            e?.preventDefault()
+          }
+        }))"
+        :content="{ align: 'end' }"
+      >
+        <UButton
+          label="Columns"
+          color="neutral"
+          variant="outline"
+          trailing-icon="i-lucide-chevron-down"
+          class="ml-auto"
+          aria-label="Columns select dropdown"
+        />
+      </UDropdownMenu>
+    </div>
+
+    <UTable ref="table" :data="data" :columns="columns" sticky class="h-96">
+      <template #expanded="{ row }">
+        <pre>{{ row.original }}</pre>
+      </template>
+    </UTable>
+  </div>
+</template>
+
 <script setup lang="ts">
 import { h, resolveComponent } from 'vue';
 import { upperFirst } from 'scule';
@@ -162,48 +207,3 @@ const columns: TableColumn<Account>[] = [
 
 const table = useTemplateRef('table');
 </script>
-
-<template>
-  <div class="flex-1 divide-y divide-(--ui-border-accented) w-full">
-    <div class="flex items-center gap-2 px-4 py-3.5 overflow-x-auto">
-      <UInput
-        :model-value="(table?.tableApi?.getColumn('name')?.getFilterValue() as string)"
-        class="max-w-sm min-w-[12ch]"
-        placeholder="Filter on name..."
-        @update:model-value="
-          table?.tableApi?.getColumn('name')?.setFilterValue($event)
-        "
-      />
-
-      <UDropdownMenu
-        :items="table?.tableApi?.getAllColumns().filter(column => column.getCanHide()).map(column => ({
-          label: upperFirst(column.id),
-          type: 'checkbox' as const,
-          checked: column.getIsVisible(),
-          onUpdateChecked(checked: boolean) {
-            table?.tableApi?.getColumn(column.id)?.toggleVisibility(!!checked)
-          },
-          onSelect(e?: Event) {
-            e?.preventDefault()
-          }
-        }))"
-        :content="{ align: 'end' }"
-      >
-        <UButton
-          label="Columns"
-          color="neutral"
-          variant="outline"
-          trailing-icon="i-lucide-chevron-down"
-          class="ml-auto"
-          aria-label="Columns select dropdown"
-        />
-      </UDropdownMenu>
-    </div>
-
-    <UTable ref="table" :data="data" :columns="columns" sticky class="h-96">
-      <template #expanded="{ row }">
-        <pre>{{ row.original }}</pre>
-      </template>
-    </UTable>
-  </div>
-</template>
