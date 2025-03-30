@@ -38,6 +38,40 @@ const items = ref<NavigationMenuItem[][]>([
     },
   ],
 ]);
+
+onBeforeMount(async () => {
+  const result = await useAccountStore().checkRole();
+
+  if (result.role == 'seller' || result.role == 'admin') {
+    items.value.push([
+      {
+        label: 'Products',
+        icon: 'i-streamline-production-belt',
+        to: '/profile/products',
+      },
+    ]);
+  }
+
+  if (result.role == 'admin') {
+    items.value.push([
+      {
+        label: 'Users',
+        icon: 'i-mdi-account-multiple',
+        to: '/profile/admin/users',
+      },
+      {
+        label: 'Orders',
+        icon: 'i-mdi-paper-text',
+        to: '/profile/admin/orders',
+      },
+      {
+        label: 'Seller requests',
+        icon: 'i-mdi-account-cash',
+        to: '/profile/admin/requests',
+      },
+    ]);
+  }
+});
 </script>
 
 <style scoped>
