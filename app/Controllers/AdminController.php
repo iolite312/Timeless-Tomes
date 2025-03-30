@@ -2,8 +2,8 @@
 
 namespace App\Controllers;
 
-use App\Repositories\OrderRepository;
 use App\Repositories\UserRepository;
+use App\Repositories\OrderRepository;
 
 class AdminController extends Controller
 {
@@ -26,11 +26,31 @@ class AdminController extends Controller
                 'message' => 'Something went wrong',
             ];
         }
+
         return [
             'status' => 200,
             'users' => $users ? array_map(function ($user) {
                 return $user->toArray();
             }, $users) : [],
+        ];
+    }
+
+    public function getAllOrders(): array
+    {
+        try {
+            $orders = $this->orderRepository->getAllOrders();
+        } catch (\Exception) {
+            return [
+                'status' => 500,
+                'message' => 'Something went wrong',
+            ];
+        }
+
+        return [
+            'status' => 200,
+            'orders' => $orders ? array_map(function ($order) {
+                return $order->toArray();
+            }, $orders) : [],
         ];
     }
 }

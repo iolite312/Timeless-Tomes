@@ -1,7 +1,7 @@
 <?php
 
-use App\Application\Router;
 use App\Enums\RoleEnum;
+use App\Application\Router;
 use App\Middleware\EnsureValidLogin;
 use App\Middleware\EnsureInvalidLogin;
 use App\Middleware\EnsureValidRoleAccess;

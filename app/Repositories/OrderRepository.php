@@ -50,6 +50,24 @@ class OrderRepository extends DatabaseRepository
         return $orderArray;
     }
 
+    public function getAllOrders(): ?array
+    {
+        $sql = 'SELECT * FROM orders';
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute();
+        $orders = $stmt->fetchAll(\PDO::FETCH_ASSOC);
+        $orderArray = null;
+        if ($orders) {
+            foreach ($orders as $order) {
+                $tempOrder = new Order($order);
+                $tempOrder->order_lines = $this->getOrderlinesByOrderId($order['id']);
+                $orderArray[] = $tempOrder;
+            }
+        }
+
+        return $orderArray;
+    }
+
     private function getOrderlinesByOrderId(int $id): array
     {
         $sql = 'SELECT OB.order_id, B.id AS book_id, B.title, B.description, B.picture, B.author, B.language, B.genre, B.isbn, B.price, B.seller_id, S.name AS seller_name, OB.quantity 
@@ -64,6 +82,7 @@ class OrderRepository extends DatabaseRepository
         foreach ($orderlines as $orderline) {
             $orderLinesArray[] = new OrderLine($orderline);
         }
+
         return $orderLinesArray;
     }
 
@@ -82,7 +101,7 @@ class OrderRepository extends DatabaseRepository
                 'user_id' => $userId,
             ]);
             $orderId = $this->pdo->lastInsertId();
-            //TODO: make it only subtract if payment is successful
+            // TODO: make it only subtract if payment is successful
             foreach ($data['orderlines'] as $orderline) {
                 $sql = 'INSERT INTO orders_books (order_id, book_id, quantity) VALUES (:order_id, :book_id, :quantity)';
                 $stmt = $this->pdo->prepare($sql);
