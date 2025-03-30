@@ -2,7 +2,7 @@
   <OrderTable :orders="data" />
 </template>
 
-<script lang="ts" setup>
+<script setup lang="ts">
 import axiosClient from '~/axios';
 import type { Order, OrderResponse } from '~/types';
 
@@ -18,7 +18,7 @@ onBeforeMount(async () => {
     useAccountStore().token
   }`;
   const { data: response } = await axiosClient.get<OrderResponse>(
-    '/profile/orders'
+    '/admin/orders'
   );
   if (!response) return;
   data.value = response.orders as Order[];
