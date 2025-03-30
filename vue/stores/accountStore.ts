@@ -53,7 +53,7 @@ export const useAccountStore = defineStore('account', () => {
   function checkAvailability(orderData: CreateOrder): Promise<OrderResponse> {
     axiosClient.defaults.headers.common.Authorization = `Bearer ${token.value}`
     return new Promise((resolve, reject) => {
-      const order: Order = { ...orderData, orderlines: cart.value }
+      const order: Order = { ...orderData, order_lines: cart.value }
       axiosClient.post<OrderResponse>('/cart/availability', order)
         .then((response) => {
           resolve(response.data)
@@ -63,6 +63,20 @@ export const useAccountStore = defineStore('account', () => {
         })
     })
   }
+
+  function checkRole(): Promise<Account> {
+    axiosClient.defaults.headers.common.Authorization = `Bearer ${token.value}`
+    return new Promise((resolve, reject) => {
+      axiosClient.get<Account>('/profile')
+        .then((response) => {
+          resolve(response.data)
+        })
+        .catch((error) => {
+          reject(error)
+        })
+    })
+  }
+
 
   function register(data: Register): Promise<UserResponse> {
     return new Promise((resolve, reject) => {
@@ -131,5 +145,5 @@ export const useAccountStore = defineStore('account', () => {
     axiosClient.defaults.headers.common.Authorization = ''
   }
 
-  return { account, token, fullname, isAuthenticated, cart, cartCount, addToCart, updateQuantity, removeFromCart, checkAvailability, register, login, updateUser, deleteAccount, $reset }
+  return { account, token, fullname, isAuthenticated, cart, cartCount, addToCart, updateQuantity, removeFromCart, checkAvailability, checkRole, register, login, updateUser, deleteAccount, $reset }
 }, { persist: true })
