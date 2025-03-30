@@ -2,8 +2,8 @@
 
 namespace App\Middleware;
 
-use App\Application\Request;
 use App\Enums\RoleEnum;
+use App\Application\Request;
 use App\Helpers\TokenHelper;
 
 class EnsureValidRoleAccess implements MiddlewareInterface

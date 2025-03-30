@@ -5,8 +5,8 @@ namespace App\Controllers;
 use App\Helpers\FileHelper;
 use App\Application\Request;
 use App\Helpers\TokenHelper;
-use App\Repositories\OrderRepository;
 use App\Repositories\UserRepository;
+use App\Repositories\OrderRepository;
 
 class ProfileController extends Controller
 {
@@ -132,6 +132,7 @@ class ProfileController extends Controller
                 'message' => 'Something went wrong',
             ];
         }
+
         return [
             'status' => 200,
             'orders' => $orders ? array_map(function ($order) {

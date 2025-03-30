@@ -65,6 +65,7 @@ class UserRepository extends DatabaseRepository
         $stmt = $this->pdo->prepare($sql);
         $stmt->execute();
         $users = $stmt->fetchAll(\PDO::FETCH_ASSOC);
+
         return array_map(function ($user) {
             return new User($user);
         }, $users);

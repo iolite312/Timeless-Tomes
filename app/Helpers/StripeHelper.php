@@ -51,7 +51,7 @@ class StripeHelper
         $amount = 0;
 
         foreach ($items as $item) {
-            /**
+            /*
              * @var \App\Models\OrderLine $item
              */
             $amount += $item->book->price * $item->quantity;
