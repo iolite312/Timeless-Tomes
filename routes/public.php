@@ -1,8 +1,10 @@
 <?php
 
 use App\Application\Router;
+use App\Enums\RoleEnum;
 use App\Middleware\EnsureValidLogin;
 use App\Middleware\EnsureInvalidLogin;
+use App\Middleware\EnsureValidRoleAccess;
 
 $router = Router::getInstance();
 
@@ -22,4 +24,8 @@ $router->middleware(EnsureValidLogin::class, function () use ($router) {
     $router->delete('/api/profile/delete', [App\Controllers\ProfileController::class, 'delete']);
     $router->post('/api/cart/availability', [App\Controllers\CartController::class, 'checkAvailability']);
     $router->post('/api/cart/create', [App\Controllers\CartController::class, 'createIntent']);
+    $router->middleware(EnsureValidRoleAccess::class, function () use ($router) {
+        $router->get('/api/admin/orders', [App\Controllers\AdminController::class, 'getAllOrders']);
+        $router->get('/api/admin/users', [App\Controllers\AdminController::class, 'getAllUsers']);
+    }, [[RoleEnum::ADMIN]]);
 });
