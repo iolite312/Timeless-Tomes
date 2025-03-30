@@ -86,6 +86,7 @@ import * as z from 'zod';
 import type { Account, Update } from '~/types';
 
 definePageMeta({
+  layout: 'profile',
   middleware: 'auth',
 });
 

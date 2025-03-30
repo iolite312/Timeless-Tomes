@@ -5,6 +5,11 @@
 </template>
 
 <script lang="ts" setup>
+definePageMeta({
+  layout: 'profile',
+  middleware: 'auth',
+});
+
 const orderStore = useOrderStore();
 const orders = computed(() => orderStore.orders);
 onBeforeMount(() => {
