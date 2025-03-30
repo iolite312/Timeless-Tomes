@@ -59,6 +59,17 @@ class UserRepository extends DatabaseRepository
         return null;
     }
 
+    public function getAllUsers(): array
+    {
+        $sql = 'SELECT * FROM users ORDER BY last_name ASC';
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute();
+        $users = $stmt->fetchAll(\PDO::FETCH_ASSOC);
+        return array_map(function ($user) {
+            return new User($user);
+        }, $users);
+    }
+
     public function updateUser(User $user): bool
     {
         $sql = 'UPDATE users SET email = :email, password = :password, first_name = :first_name, last_name = :last_name, role = :role, profile_picture = :profile_picture, street = :street, city = :city, postalcode = :postalcode WHERE id = :id';

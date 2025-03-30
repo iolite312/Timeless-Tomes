@@ -82,6 +82,7 @@ class OrderRepository extends DatabaseRepository
                 'user_id' => $userId,
             ]);
             $orderId = $this->pdo->lastInsertId();
+            //TODO: make it only subtract if payment is successful
             foreach ($data['orderlines'] as $orderline) {
                 $sql = 'INSERT INTO orders_books (order_id, book_id, quantity) VALUES (:order_id, :book_id, :quantity)';
                 $stmt = $this->pdo->prepare($sql);
