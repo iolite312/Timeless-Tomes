@@ -46,7 +46,8 @@ export enum PaymentStatus {
 
 export interface OrderResponse {
   status: number;
-  message: string | Array<CartItem | Order>;
+  message: string | Array<CartItem>;
+  orders?: Order[];
 }
 
 
