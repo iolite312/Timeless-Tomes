@@ -5,6 +5,11 @@ import type { TableColumn } from '@nuxt/ui';
 import type { Account, AccountResponse } from '~/types';
 import axiosClient from '~/axios';
 
+definePageMeta({
+  layout: 'profile',
+  middleware: 'auth',
+});
+
 const UButton = resolveComponent('UButton');
 const UDropdownMenu = resolveComponent('UDropdownMenu');
 
