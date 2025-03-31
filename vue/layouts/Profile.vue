@@ -47,7 +47,9 @@ onBeforeMount(async () => {
       {
         label: 'Products',
         icon: 'i-streamline-production-belt',
-        to: '/profile/products',
+        to: `/profile/seller/products${
+          result.seller_id ? `?id=${result.seller_id}` : ''
+        }`,
       },
     ]);
   }
@@ -68,6 +70,11 @@ onBeforeMount(async () => {
         label: 'Seller requests',
         icon: 'i-mdi-account-cash',
         to: '/profile/admin/requests',
+      },
+      {
+        label: 'Products',
+        icon: 'i-streamline-production-belt',
+        to: '/profile/admin/products',
       },
     ]);
   }
