@@ -1,63 +1,72 @@
 <template>
-  <div
-    class="flex flex-row items-center gap-4 justify-between rounded-md border border-[#475569] p-4"
-  >
-    <NuxtLink
-      class="max-w-40 lg:max-w-1/5 xl:max-w-1/8"
-      :to="`/books/${book.id}`"
-    >
-      <NuxtImg
-        class="rounded-md"
-        :src="`${useRuntimeConfig().public.BASE_URL}/images/uploads/books/${
-          book.picture
-        }`"
-      />
-    </NuxtLink>
-    <div
-      class="flex flex-col md:flex-row md:grow items-center md:items-start justify-between gap-2"
-    >
-      <h3 class="text-2xl font-bold">{{ book.title }}</h3>
-      <UInputNumber
-        v-model="count"
-        :default-value="1"
-        :min="1"
-        class="w-32"
-        @change="updateCart"
-      />
-      <p class="font-bold">
-        {{ count }} x €{{ book.price.toFixed(2) }}: €{{
-          (book.price * count).toFixed(2)
-        }}
-      </p>
-      <UButton icon="i-lucide-trash-2" color="error" @click="removeFromCart" />
-    </div>
-  </div>
+  <UCard variant="outline" class="w-fit">
+    <template #header>
+      <h1 class="text-2xl font-bold">{{ book.title }}</h1>
+    </template>
+
+    <NuxtImg
+      :src="`${useRuntimeConfig().public.BASE_URL}/images/uploads/books/${
+        book.picture
+      }`"
+      class="max-w-82 h-full rounded-md"
+    />
+
+    <template #footer>
+      <div class="flex justify-between">
+        <div>
+          <p>€{{ book.price.toFixed(2) }}</p>
+          <p>{{ book.stock }} in stock</p>
+        </div>
+        <div class="flex gap-2">
+          <UButton>
+            <NuxtLink :to="`/sellers/products/${book.id}`"
+              >View details</NuxtLink
+            >
+          </UButton>
+          <UButton
+            color="error"
+            icon="i-lucide-trash"
+            class="w-12 h-12 flex items-center justify-center"
+            @click="warning(book.id)"
+          />
+        </div>
+      </div>
+    </template>
+  </UCard>
 </template>
 
 <script lang="ts" setup>
 import type { Book } from '~/types';
+import { DeletionModal } from '#components';
 
-const props = defineProps({
+defineProps({
   book: {
     type: Object as PropType<Book>,
     required: true,
   },
 });
 
-const emit = defineEmits(['removeFromCart']);
+const modal = useModal();
+const toast = useToast();
+const bookStore = useBookStore();
+const emit = defineEmits(['remove']);
 
-const count = ref(
-  useAccountStore().cart.find((item) => item.id === props.book.id)?.quantity ||
-    1
-);
-
-function updateCart() {
-  useAccountStore().updateQuantity(props.book.id, count.value);
-}
-
-function removeFromCart() {
-  useAccountStore().removeFromCart(props.book.id);
-  emit('removeFromCart');
+function warning(id: number) {
+  modal.open(DeletionModal, {
+    title: 'Are you sure you want to delete this product?',
+    description: 'This action cannot be undone',
+    onDeletion() {
+      bookStore.deleteBook(id).catch(() => {
+        toast.add({
+          title: 'Error',
+          description: 'Something went wrong',
+          color: 'error',
+        });
+      });
+      emit('remove');
+      modal.close();
+    },
+  });
 }
 </script>
 
