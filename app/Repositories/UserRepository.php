@@ -2,8 +2,8 @@
 
 namespace App\Repositories;
 
-use App\Models\Seller;
 use App\Models\User;
+use App\Models\Seller;
 use App\Enums\RoleEnum;
 
 class UserRepository extends DatabaseRepository
@@ -41,11 +41,13 @@ class UserRepository extends DatabaseRepository
         $stmt->execute(['id' => $id]);
         $user = $stmt->fetch(\PDO::FETCH_ASSOC);
         if ($user) {
-            $seller = $this->getSellerById($id);
+            $seller = $this->getSellerByUserId($id);
             if ($seller) {
                 $user = array_merge($user, $seller);
+
                 return new Seller($user);
             }
+
             return new User($user);
         }
 
@@ -59,20 +61,35 @@ class UserRepository extends DatabaseRepository
         $stmt->execute(['email' => $email]);
         $user = $stmt->fetch(\PDO::FETCH_ASSOC);
         if ($user) {
-            $seller = $this->getSellerById($user['id']);
+            $seller = $this->getSellerByUserId($user['id']);
             if ($seller) {
                 $user = array_merge($user, $seller);
+
                 return new Seller($user);
             }
+
             return new User($user);
         }
 
         return null;
     }
 
-    private function getSellerById(int $id): ?array
+    private function getSellerByUserId(int $id): ?array
     {
         $sql = 'SELECT id AS "seller_id", name AS "seller_name", user_id FROM sellers WHERE user_id = :id';
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute(['id' => $id]);
+        $seller = $stmt->fetch(\PDO::FETCH_ASSOC);
+        if ($seller) {
+            return $seller;
+        }
+
+        return null;
+    }
+
+    public function getSellerById(int $id): ?array
+    {
+        $sql = 'SELECT id AS "seller_id", name AS "seller_name", user_id FROM sellers WHERE id = :id';
         $stmt = $this->pdo->prepare($sql);
         $stmt->execute(['id' => $id]);
         $seller = $stmt->fetch(\PDO::FETCH_ASSOC);
@@ -91,11 +108,13 @@ class UserRepository extends DatabaseRepository
         $users = $stmt->fetchAll(\PDO::FETCH_ASSOC);
 
         return array_map(function ($user) {
-            $seller = $this->getSellerById($user['id']);
+            $seller = $this->getSellerByUserId($user['id']);
             if ($seller) {
                 $user = array_merge($user, $seller);
+
                 return new Seller($user);
             }
+
             return new User($user);
         }, $users);
     }

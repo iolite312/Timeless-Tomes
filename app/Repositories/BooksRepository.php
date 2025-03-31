@@ -16,12 +16,14 @@ class BooksRepository extends DatabaseRepository
 
     public function create(array $data)
     {
-        $sql = 'INSERT INTO books (title, description, author, genre, isbn, price, stock, seller_id) VALUES (:title, :description, :author, :genre, :isbn, :price, :stock, :seller_id)';
+        $sql = 'INSERT INTO books (title, description, picture, author, language, genre, isbn, price, stock, seller_id) VALUES (:title, :description, :picture, :author, :language, :genre, :isbn, :price, :stock, :seller_id)';
         $stmt = $this->pdo->prepare($sql);
         $stmt->execute([
             'title' => $data['title'],
             'description' => $data['description'],
+            'picture' => $data['picture'],
             'author' => $data['author'],
+            'language' => $data['language'],
             'genre' => json_encode($data['genre']),
             'isbn' => $data['isbn'],
             'price' => $data['price'],
@@ -45,5 +47,53 @@ class BooksRepository extends DatabaseRepository
         }
 
         return null;
+    }
+
+    public function getAllBooks(): array
+    {
+        $sql = 'SELECT B.*, S.name AS "seller_name" FROM books AS B JOIN sellers AS S ON S.id = B.seller_id';
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute();
+        $books = $stmt->fetchAll(\PDO::FETCH_ASSOC);
+        $bookArray = [];
+        foreach ($books as $book) {
+            $bookArray[] = new Book($book);
+        }
+
+        return $bookArray;
+    }
+
+    public function getAllBooksBySellerId(int $seller_id): array
+    {
+        $sql = 'SELECT B.*, S.name AS "seller_name" FROM books AS B JOIN sellers AS S ON S.id = B.seller_id WHERE B.seller_id = :id';
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute(['id' => $seller_id]);
+        $books = $stmt->fetchAll(\PDO::FETCH_ASSOC);
+        $bookArray = [];
+        foreach ($books as $book) {
+            $bookArray[] = new Book($book);
+        }
+
+        return $bookArray;
+    }
+
+    public function checkBookExistsInOrder(int $id): bool
+    {
+        $sql = 'SELECT * FROM orders_books WHERE book_id = :id';
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute(['id' => $id]);
+        $book = $stmt->fetch(\PDO::FETCH_ASSOC);
+        if ($book) {
+            return true;
+        }
+
+        return false;
+    }
+
+    public function deleteBookById(int $id): void
+    {
+        $sql = 'DELETE FROM books WHERE id = :id';
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute(['id' => $id]);
     }
 }
