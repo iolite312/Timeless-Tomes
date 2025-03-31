@@ -18,8 +18,7 @@ class EnsureValidRoleAccess implements MiddlewareInterface
     public function handle(): bool
     {
         $role = RoleEnum::from(TokenHelper::decode(Request::getAuthToken())->claims()->get('user')['role']);
-        // var_dump($role);
-        // die;
+
         if (empty($this->allowedRoles)) {
             return true;
         }
