@@ -6,7 +6,6 @@
       @change-picture="changePicture"
     />
     <UForm
-      ref="profileForm"
       :schema="profileSchema"
       :state="state"
       class="flex flex-col gap-4"
@@ -111,8 +110,6 @@ const state = ref({
   city: account.city,
   postalcode: account.postalcode,
 });
-
-const profileForm = ref('profileForm');
 
 const profileSchema = z
   .object({
