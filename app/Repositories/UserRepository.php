@@ -2,6 +2,7 @@
 
 namespace App\Repositories;
 
+use App\Models\Seller;
 use App\Models\User;
 use App\Enums\RoleEnum;
 
@@ -33,13 +34,18 @@ class UserRepository extends DatabaseRepository
         return $this->getUserById($userId);
     }
 
-    public function getUserById(int $id): ?User
+    public function getUserById(int $id): User|Seller|null
     {
         $sql = 'SELECT * FROM users WHERE id = :id';
         $stmt = $this->pdo->prepare($sql);
         $stmt->execute(['id' => $id]);
         $user = $stmt->fetch(\PDO::FETCH_ASSOC);
         if ($user) {
+            $seller = $this->getSellerById($id);
+            if ($seller) {
+                $user = array_merge($user, $seller);
+                return new Seller($user);
+            }
             return new User($user);
         }
 
@@ -53,7 +59,25 @@ class UserRepository extends DatabaseRepository
         $stmt->execute(['email' => $email]);
         $user = $stmt->fetch(\PDO::FETCH_ASSOC);
         if ($user) {
+            $seller = $this->getSellerById($user['id']);
+            if ($seller) {
+                $user = array_merge($user, $seller);
+                return new Seller($user);
+            }
             return new User($user);
+        }
+
+        return null;
+    }
+
+    private function getSellerById(int $id): ?array
+    {
+        $sql = 'SELECT id AS "seller_id", name AS "seller_name", user_id FROM sellers WHERE user_id = :id';
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute(['id' => $id]);
+        $seller = $stmt->fetch(\PDO::FETCH_ASSOC);
+        if ($seller) {
+            return $seller;
         }
 
         return null;
@@ -67,6 +91,11 @@ class UserRepository extends DatabaseRepository
         $users = $stmt->fetchAll(\PDO::FETCH_ASSOC);
 
         return array_map(function ($user) {
+            $seller = $this->getSellerById($user['id']);
+            if ($seller) {
+                $user = array_merge($user, $seller);
+                return new Seller($user);
+            }
             return new User($user);
         }, $users);
     }

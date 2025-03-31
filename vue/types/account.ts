@@ -8,6 +8,8 @@ export interface Account {
   street?: string,
   city?: string,
   postalcode?: string,
+  seller_name?: string
+  seller_id?: number
 }
 
 export interface AccountResponse {
