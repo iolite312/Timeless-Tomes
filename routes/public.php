@@ -25,6 +25,12 @@ $router->middleware(EnsureValidLogin::class, function () use ($router) {
     $router->post('/api/cart/availability', [App\Controllers\CartController::class, 'checkAvailability']);
     $router->post('/api/cart/create', [App\Controllers\CartController::class, 'createIntent']);
     $router->middleware(EnsureValidRoleAccess::class, function () use ($router) {
+        $router->get('/api/seller/products', [App\Controllers\ProductController::class, 'getAllProducts']);
+        $router->post('/api/seller/products', [App\Controllers\ProductController::class, 'createProduct']);
+        $router->put('/api/seller/products/{id}', [App\Controllers\ProductController::class, 'updateProduct']);
+        $router->delete('/api/seller/products/{id}', [App\Controllers\ProductController::class, 'deleteProduct']);
+    }, [[RoleEnum::SELLER, RoleEnum::ADMIN]]);
+    $router->middleware(EnsureValidRoleAccess::class, function () use ($router) {
         $router->get('/api/admin/orders', [App\Controllers\AdminController::class, 'getAllOrders']);
         $router->get('/api/admin/users', [App\Controllers\AdminController::class, 'getAllUsers']);
     }, [[RoleEnum::ADMIN]]);
