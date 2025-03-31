@@ -1,7 +1,7 @@
 <template>
   <div class="flex flex-col lg:flex-row w-full gap-4">
     <div class="w-full lg:w-3/4 flex flex-col gap-4">
-      <BookCard
+      <CartItem
         v-for="book in bookData"
         :key="book.id"
         :book="book"
@@ -130,7 +130,7 @@ function renderCart() {
     const { data } = await axiosClient.get<BookResponse>(
       `/books/${element.id}`
     );
-    bookData.value.push(data.book);
+    bookData.value.push(data.book as Book);
   });
 }
 </script>
