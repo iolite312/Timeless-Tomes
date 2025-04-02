@@ -18,11 +18,11 @@
           <p>{{ book.stock }} in stock</p>
         </div>
         <div class="flex gap-2">
-          <UButton>
-            <NuxtLink :to="`/sellers/products/${book.id}`"
-              >View details</NuxtLink
-            >
-          </UButton>
+          <UButton
+            icon="i-lucide-edit"
+            class="w-12 h-12 flex items-center justify-center"
+            :to="`/profile/seller/products/${book.id}`"
+          />
           <UButton
             color="error"
             icon="i-lucide-trash"
@@ -63,7 +63,9 @@ function warning(id: number) {
           color: 'error',
         });
       });
-      emit('remove');
+      setTimeout(() => {
+        emit('remove');
+      }, 500);
       modal.close();
     },
   });
