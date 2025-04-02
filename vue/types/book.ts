@@ -26,6 +26,10 @@ export interface CreateBook {
   seller_id: number;
 }
 
+export interface UpdateBook extends CreateBook {
+  id: number;
+}
+
 export interface CartItem {
   id: number;
   quantity: number;
