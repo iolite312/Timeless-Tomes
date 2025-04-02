@@ -90,6 +90,30 @@ class BooksRepository extends DatabaseRepository
         return false;
     }
 
+    public function updateBook(Book $book): bool
+    {
+        $sql = 'UPDATE books SET title = :title, description = :description, picture = :picture, author = :author, language = :language, genre = :genre, isbn = :isbn, price = :price, stock = :stock WHERE id = :id';
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute([
+            'title' => $book->title,
+            'description' => $book->description,
+            'picture' => $book->picture,
+            'author' => $book->author,
+            'language' => $book->language,
+            'genre' => json_encode($book->genre),
+            'isbn' => $book->isbn,
+            'price' => $book->price,
+            'stock' => $book->stock,
+            'id' => $book->id,
+        ]);
+
+        if ($stmt->rowCount() > 0) {
+            return true;
+        }
+
+        return false;
+    }
+
     public function deleteBookById(int $id): void
     {
         $sql = 'DELETE FROM books WHERE id = :id';

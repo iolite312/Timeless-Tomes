@@ -27,6 +27,7 @@ $router->middleware(EnsureValidLogin::class, function () use ($router) {
     $router->middleware(EnsureValidRoleAccess::class, function () use ($router) {
         $router->get('/api/seller/products', [App\Controllers\ProductController::class, 'getAllProducts']);
         $router->post('/api/seller/products', [App\Controllers\ProductController::class, 'createProduct']);
+        $router->get('/api/seller/products/{id}', [App\Controllers\ProductController::class, 'show']);
         $router->put('/api/seller/products/{id}', [App\Controllers\ProductController::class, 'updateProduct']);
         $router->delete('/api/seller/products/{id}', [App\Controllers\ProductController::class, 'deleteProduct']);
     }, [[RoleEnum::SELLER, RoleEnum::ADMIN]]);

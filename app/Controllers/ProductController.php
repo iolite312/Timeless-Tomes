@@ -74,7 +74,7 @@ class ProductController extends Controller
 
         return [
             'status' => 200,
-            'books' => $books ? array_map(fn($book) => $book->toArray(), $books) : [],
+            'books' => $books ? array_map(fn ($book) => $book->toArray(), $books) : [],
         ];
     }
 
@@ -135,6 +135,59 @@ class ProductController extends Controller
         return [
             'status' => 200,
             'message' => 'Book deleted',
+        ];
+    }
+
+    public function updateProduct()
+    {
+        $data = json_decode(file_get_contents('php://input'), true) ?? [];
+
+        try {
+            $book = $this->booksRepository->getBookById(Request::getParam('id'));
+        } catch (\Exception) {
+            return [
+                'status' => 500,
+                'message' => 'Something went wrong',
+            ];
+        }
+
+        if (!$book || ($book->seller_id !== TokenHelper::decode(Request::getAuthToken())->claims()->get('user')['seller_id'] && RoleEnum::from(TokenHelper::decode(Request::getAuthToken())->claims()->get('user')['role']) !== RoleEnum::ADMIN)) {
+            return [
+                'status' => 404,
+                'message' => 'Book not found',
+            ];
+        }
+
+        $book->title = $data['title'] ?? $book->title;
+        $book->description = $data['description'] ?? $book->description;
+        $book->author = $data['author'] ?? $book->author;
+        $book->language = $data['language'] ?? $book->language;
+        $book->genre = $data['genre'] ?? $book->genre;
+        $book->isbn = $data['isbn'] ?? $book->isbn;
+        $book->price = $data['price'] ?? $book->price;
+        $book->stock = $data['stock'] ?? $book->stock;
+
+        if ($data['picture'] !== $book->picture) {
+            $result = FileHelper::saveFile($data['profile_picture'], 'books');
+            if ($result) {
+                FileHelper::deleteFile($book->picture, 'books');
+                $book->picture = $result;
+            }
+        }
+
+        try {
+            $this->booksRepository->updateBook($book);
+        } catch (\Exception) {
+            return [
+                'status' => 500,
+                'message' => 'Something went wrong',
+            ];
+        }
+
+        return [
+            'status' => 200,
+            'message' => 'Book updated',
+            'book' => $book->toArray(),
         ];
     }
 }
