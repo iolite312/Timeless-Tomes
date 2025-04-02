@@ -3,7 +3,7 @@
     <div class="flex justify-between items-center">
       <h3 class="text-2xl font-bold mb-4">My products</h3>
       <UButton>
-        <NuxtLink to="/profile/seller/new">Add product</NuxtLink>
+        <NuxtLink to="/profile/seller/products/new">Add product</NuxtLink>
       </UButton>
     </div>
     <div class="flex flex-row flex-wrap gap-4">
