@@ -53,7 +53,6 @@ function updateImage() {
 }
 
 onMounted(() => {
-  console.log(newImage.value);
   updateImage();
 });
 
