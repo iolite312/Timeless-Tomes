@@ -16,7 +16,6 @@ export default defineNuxtConfig({
     'pinia-plugin-persistedstate/nuxt',
     '@vueuse/nuxt',
     '@nuxt/eslint',
-    'nuxt-meilisearch',
   ],
   css: ['~/assets/css/main.css'],
   ssr: false,
@@ -32,10 +31,9 @@ export default defineNuxtConfig({
   runtimeConfig: {
     public: {
       BASE_URL: process.env.BASE_URL,
-      STRIPE_PUBLIC_KEY: process.env.STRIPE_PUBLIC_KEY
+      STRIPE_PUBLIC_KEY: process.env.STRIPE_PUBLIC_KEY,
+      MEILI_HOST_URL: process.env.MEILI_HOST_URL
     }
-  },
-  meilisearch: {
   },
   piniaPluginPersistedstate: {
     storage: 'localStorage'

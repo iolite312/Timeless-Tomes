@@ -38,7 +38,7 @@ async function renderPage() {
     useAccountStore().token
   }`;
   const { data } = await axiosClient.get<BooksResponse>(
-    `/seller/products?id=${useRoute().query.id}`
+    `/seller/products?id=${useRoute().query.id ?? ''}`
   );
   books.value = data.books;
 }

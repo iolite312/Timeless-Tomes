@@ -40,11 +40,11 @@ services:
             - meilisearchdata:/meili_data
         ports:
             - 7700:7700
+        env_file:
+            - .env
         environment:
             - http_proxy
             - https_proxy
-            - MEILI_MASTER_KEY=YOUR_MASTER_KEY
-            - MEILI_SEARCH_KEY=STATIC_SEARCH_KEY
             - MEILI_NO_ANALYTICS=true
             - MEILI_ENV=development
             - MEILI_LOG_LEVEL

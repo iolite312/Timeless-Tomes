@@ -5,6 +5,7 @@ namespace App\Controllers;
 use App\Enums\RoleEnum;
 use App\Helpers\FileHelper;
 use App\Application\Request;
+use App\Helpers\SearchHelper;
 use App\Helpers\TokenHelper;
 use App\Repositories\UserRepository;
 use App\Repositories\BooksRepository;
@@ -13,11 +14,13 @@ class ProductController extends Controller
 {
     private BooksRepository $booksRepository;
     private UserRepository $userRepository;
+    private SearchHelper $searchHelper;
 
     public function __construct()
     {
         $this->booksRepository = new BooksRepository();
         $this->userRepository = new UserRepository();
+        $this->searchHelper = SearchHelper::getInstance();
     }
 
     public function index()
@@ -74,7 +77,7 @@ class ProductController extends Controller
 
         return [
             'status' => 200,
-            'books' => $books ? array_map(fn ($book) => $book->toArray(), $books) : [],
+            'books' => $books ? array_map(fn($book) => $book->toArray(), $books) : [],
         ];
     }
 
@@ -91,6 +94,7 @@ class ProductController extends Controller
 
         try {
             $book = $this->booksRepository->create($data);
+            $this->searchHelper->indexBook($book);
         } catch (\Exception $e) {
             FileHelper::deleteFile($data['picture'], 'books');
 
@@ -124,6 +128,7 @@ class ProductController extends Controller
                 ];
             }
             $this->booksRepository->deleteBookById(Request::getParam('id'));
+            $this->searchHelper->removeBook(Request::getParam('id'));
             FileHelper::deleteFile($book->picture, 'books');
         } catch (\Exception $e) {
             return [
@@ -177,6 +182,7 @@ class ProductController extends Controller
 
         try {
             $this->booksRepository->updateBook($book);
+            $this->searchHelper->indexBook($book);
         } catch (\Exception) {
             return [
                 'status' => 500,
@@ -188,6 +194,14 @@ class ProductController extends Controller
             'status' => 200,
             'message' => 'Book updated',
             'book' => $book->toArray(),
+        ];
+    }
+
+    public function searchKey()
+    {
+        return [
+            'status' => 200,
+            'key' => $this->searchHelper->getSearchKey()
         ];
     }
 }

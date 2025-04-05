@@ -9,6 +9,7 @@ use App\Middleware\EnsureValidRoleAccess;
 $router = Router::getInstance();
 
 $router->get('/api/books/{id}', [App\Controllers\ProductController::class, 'show']);
+$router->get('/api/search', [App\Controllers\ProductController::class, 'searchKey']);
 $router->post('/api/stripe/webhook', [App\Controllers\CartController::class, 'webhook']);
 
 // Routes
