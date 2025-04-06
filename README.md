@@ -118,6 +118,13 @@ The application should now be running at:
 - Frontend: http://localhost:3000
 - Backend API: http://localhost:8080
 
+## Accounts
+
+```
+admin: admin@gmail.com, 123456789
+seller: seller@gmail.com, 123456789
+```
+
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
