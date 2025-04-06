@@ -173,7 +173,7 @@ class ProductController extends Controller
         $book->stock = $data['stock'] ?? $book->stock;
 
         if ($data['picture'] !== $book->picture) {
-            $result = FileHelper::saveFile($data['profile_picture'], 'books');
+            $result = FileHelper::saveFile($data['picture'], 'books');
             if ($result) {
                 FileHelper::deleteFile($book->picture, 'books');
                 $book->picture = $result;
