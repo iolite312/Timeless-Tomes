@@ -1,7 +1,19 @@
+<!-- eslint-disable vue/html-self-closing -->
 <template>
   <div class="w-full">
     <ais-instant-search :search-client="client" index-name="books">
-      <ais-search-box placeholder="Search here…" class="searchbox" />
+      <ais-search-box class="mb-4">
+        <template #default="{ currentRefinement, isSearchStalled, refine }">
+          <input
+            type="search"
+            :value="currentRefinement"
+            class="w-full rounded-[calc(var(--ui-radius)*1.5)] border-0 placeholder:text-(--ui-text-dimmed) focus:outline-none disabled:cursor-not-allowed disabled:opacity-75 px-3 py-2 text-base gap-2 text-(--ui-text-highlighted) bg-(--ui-bg) ring ring-inset ring-(--ui-border-accented) focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-(--ui-primary)"
+            placeholder="Search..."
+            @input="refine($event.currentTarget.value)"
+          />
+          <span :hidden="!isSearchStalled">Loading...</span>
+        </template>
+      </ais-search-box>
 
       <div class="flex flex-row max-height">
         <div class="w-54 border-r-1 border-t-1 p-4 border-[#475569]">
@@ -10,7 +22,7 @@
         <div class="flex flex-col flex-1 pt-12 border-t-1 p-4 border-[#475569]">
           <ais-hits class="flex flex-row flex-wrap gap-4">
             <template #default="{ items }">
-              <BookCard v-for="book in items" :key="book.id" :book="book" />
+              <SearchCard v-for="book in items" :key="book.id" :book="book" />
             </template>
           </ais-hits>
         </div>
