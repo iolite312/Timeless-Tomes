@@ -176,7 +176,7 @@ class ProfileController extends Controller
         if ($validation->fails()) {
             return [
                 'status' => 422,
-                'error' => "Name is already in use or application is pending",
+                'error' => 'Name is already in use or application is pending',
             ];
         }
 
