@@ -3,8 +3,8 @@
 namespace App\Helpers;
 
 use App\Models\Book;
-use App\Repositories\BooksRepository;
 use Meilisearch\Client;
+use App\Repositories\BooksRepository;
 
 class SearchHelper
 {

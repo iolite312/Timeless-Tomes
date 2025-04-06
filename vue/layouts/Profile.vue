@@ -55,6 +55,14 @@ onBeforeMount(async () => {
         }`,
       },
     ]);
+  } else {
+    items.value.push([
+      {
+        label: 'Requests',
+        icon: 'i-mdi-account-cash',
+        to: '/profile/seller/requests',
+      },
+    ]);
   }
 
   if (result.user.role == 'admin') {

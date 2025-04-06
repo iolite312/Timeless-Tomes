@@ -158,28 +158,14 @@ class UserRepository extends DatabaseRepository
         return false;
     }
 
-    public function updateSeller(Seller $seller): bool
+    public function createSeller(array $data): bool
     {
-        $sql = 'UPDATE sellers SET name = :name, user_id = :user_id WHERE id = :id';
+        $sql = 'INSERT INTO sellers (name, user_id) VALUES (:name, :user_id)';
         $stmt = $this->pdo->prepare($sql);
         $stmt->execute([
-            'name' => $seller->seller_name,
-            'user_id' => $seller->user_id,
-            'id' => $seller->id,
+            'name' => $data['name'],
+            'user_id' => $data['user_id'],
         ]);
-
-        if ($stmt->rowCount() > 0) {
-            return true;
-        }
-
-        return false;
-    }
-
-    public function deleteSeller(int $id): bool
-    {
-        $sql = 'DELETE FROM sellers WHERE id = :id';
-        $stmt = $this->pdo->prepare($sql);
-        $stmt->execute(['id' => $id]);
 
         if ($stmt->rowCount() > 0) {
             return true;
@@ -205,6 +191,22 @@ class UserRepository extends DatabaseRepository
         $sql = 'UPDATE sellers SET approved = 1 WHERE id = :id';
         $stmt = $this->pdo->prepare($sql);
         $stmt->execute(['id' => $id]);
+
+        if ($stmt->rowCount() == 0) {
+            return false;
+        }
+
+        $sql = 'SELECT user_id FROM sellers WHERE id = :id';
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute(['id' => $id]);
+        $user_id = $stmt->fetch(\PDO::FETCH_ASSOC);
+
+        $sql = 'UPDATE users SET role = :role WHERE id = :id';
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute([
+            'role' => RoleEnum::SELLER->value,
+            'id' => $user_id['user_id'],
+        ]);
 
         if ($stmt->rowCount() > 0) {
             return true;

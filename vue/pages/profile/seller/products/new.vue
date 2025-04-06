@@ -18,10 +18,7 @@ definePageMeta({
 
 const toast = useToast();
 
-async function createBook(
-  event: FormSubmitEvent<BookSchema>,
-  seller_id: number
-) {
+async function createBook(event: FormSubmitEvent<BookSchema>) {
   const book = await useBookStore().createBook(event.data as CreateBook);
 
   if (book) {
@@ -32,7 +29,9 @@ async function createBook(
       color: 'success',
     });
     setTimeout(() => {
-      useRouter().push('/profile/seller/products?id=' + seller_id);
+      useRouter().push(
+        '/profile/seller/products?id=' + useAccountStore().account?.seller_id
+      );
     }, 2000);
   } else {
     toast.add({

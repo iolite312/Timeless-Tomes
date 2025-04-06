@@ -5,6 +5,8 @@ namespace App\Controllers;
 use App\Helpers\FileHelper;
 use App\Application\Request;
 use App\Helpers\TokenHelper;
+use App\Validation\UniqueRule;
+use Rakit\Validation\Validator;
 use App\Repositories\UserRepository;
 use App\Repositories\OrderRepository;
 
@@ -144,6 +146,52 @@ class ProfileController extends Controller
             'orders' => $orders ? array_map(function ($order) {
                 return $order->toArray();
             }, $orders) : [],
+        ];
+    }
+
+    public function createSellerAccount()
+    {
+        $json = file_get_contents('php://input');
+        $data = json_decode($json, true);
+        $decodedToken = TokenHelper::decode(Request::getAuthToken());
+        $user = $this->userRepository->getUserByEmail($decodedToken->claims()->get('user')['email']);
+
+        if (!$user) {
+            return [
+                'status' => 404,
+                'message' => 'User not found',
+            ];
+        }
+
+        $data['user_id'] = $user->id;
+
+        $validator = new Validator();
+        $validator->addValidator('unique', new UniqueRule());
+
+        $validation = $validator->validate($data, [
+            'name' => 'required|unique:sellers,name|max:255',
+            'user_id' => 'required|unique:sellers,user_id',
+        ]);
+
+        if ($validation->fails()) {
+            return [
+                'status' => 422,
+                'errors' => $validation->errors()->firstOfAll(),
+            ];
+        }
+
+        try {
+            $this->userRepository->createSeller($data);
+        } catch (\Exception) {
+            return [
+                'status' => 500,
+                'message' => 'Something went wrong',
+            ];
+        }
+
+        return [
+            'status' => 200,
+            'message' => 'Seller account created',
         ];
     }
 }

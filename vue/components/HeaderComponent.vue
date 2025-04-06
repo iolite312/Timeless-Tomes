@@ -97,11 +97,6 @@ const navbarItems = ref([
     icon: 'i-material-symbols-search-rounded',
     to: '/search',
   },
-  {
-    label: 'Protected',
-    icon: 'i-lucide-lock',
-    to: '/protected',
-  },
 ]);
 
 const dropdownItems = ref([

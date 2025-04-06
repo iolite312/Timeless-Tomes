@@ -5,8 +5,8 @@ namespace App\Controllers;
 use App\Enums\RoleEnum;
 use App\Helpers\FileHelper;
 use App\Application\Request;
-use App\Helpers\SearchHelper;
 use App\Helpers\TokenHelper;
+use App\Helpers\SearchHelper;
 use App\Repositories\UserRepository;
 use App\Repositories\BooksRepository;
 
@@ -77,7 +77,7 @@ class ProductController extends Controller
 
         return [
             'status' => 200,
-            'books' => $books ? array_map(fn($book) => $book->toArray(), $books) : [],
+            'books' => $books ? array_map(fn ($book) => $book->toArray(), $books) : [],
         ];
     }
 
@@ -201,7 +201,7 @@ class ProductController extends Controller
     {
         return [
             'status' => 200,
-            'key' => $this->searchHelper->getSearchKey()
+            'key' => $this->searchHelper->getSearchKey(),
         ];
     }
 }

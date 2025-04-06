@@ -2,8 +2,8 @@
 
 namespace App\Controllers;
 
-use App\Helpers\StripeHelper;
 use App\Helpers\TokenHelper;
+use App\Helpers\StripeHelper;
 use App\Validation\UniqueRule;
 use Rakit\Validation\Validator;
 use App\Repositories\UserRepository;
@@ -33,7 +33,7 @@ class AuthController extends Controller
         if ($validation->fails()) {
             return [
                 'status' => 422,
-                'errors' => $validation->errors()->firstOfAll(),
+                'error' => 'approve is pending or name is already in use',
             ];
         }
 
