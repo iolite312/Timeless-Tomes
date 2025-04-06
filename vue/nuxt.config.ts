@@ -38,7 +38,7 @@ export default defineNuxtConfig({
     public: {
       BASE_URL: process.env.BASE_URL,
       STRIPE_PUBLIC_KEY: process.env.STRIPE_PUBLIC_KEY,
-      MEILI_HOST_URL: process.env.MEILI_HOST_URL
+      MEILI_HOST_URL: process.env.MEILI_HOST_URL_FRONTEND
     }
   },
   piniaPluginPersistedstate: {

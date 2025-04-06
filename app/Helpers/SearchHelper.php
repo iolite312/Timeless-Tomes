@@ -16,7 +16,7 @@ class SearchHelper
     public function __construct()
     {
         $this->booksRepository = new BooksRepository();
-        $this->client = new Client($_ENV['MEILI_HOST_URL'], $_ENV['MEILI_MASTER_KEY']);
+        $this->client = new Client($_ENV['MEILI_HOST_URL_BACKEND'], $_ENV['MEILI_MASTER_KEY']);
     }
 
     public static function getInstance(): SearchHelper
