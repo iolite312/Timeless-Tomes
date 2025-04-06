@@ -18,7 +18,7 @@ class UserRepository extends DatabaseRepository
 
     public function createUser(array $data): User
     {
-        $sql = 'INSERT INTO users (email, password, first_name, last_name, role, profile_picture) VALUES (:email, :password, :first_name, :last_name, :role, :profile_picture)';
+        $sql = 'INSERT INTO users (email, password, first_name, last_name, role, profile_picture, stripe_customer) VALUES (:email, :password, :first_name, :last_name, :role, :profile_picture, :stripe_customer)';
         $stmt = $this->pdo->prepare($sql);
         $stmt->execute([
             'email' => $data['email'],
@@ -27,6 +27,7 @@ class UserRepository extends DatabaseRepository
             'last_name' => $data['last_name'],
             'role' => RoleEnum::USER->value,
             'profile_picture' => 'profile_placeholder.png',
+            'stripe_customer' => $data['stripe_customer'],
         ]);
 
         $userId = $this->pdo->lastInsertId();
@@ -76,7 +77,7 @@ class UserRepository extends DatabaseRepository
 
     private function getSellerByUserId(int $id): ?array
     {
-        $sql = 'SELECT id AS "seller_id", name AS "seller_name", user_id FROM sellers WHERE user_id = :id';
+        $sql = 'SELECT id AS "seller_id", name AS "seller_name", user_id, approved FROM sellers WHERE user_id = :id';
         $stmt = $this->pdo->prepare($sql);
         $stmt->execute(['id' => $id]);
         $seller = $stmt->fetch(\PDO::FETCH_ASSOC);
@@ -147,6 +148,61 @@ class UserRepository extends DatabaseRepository
     public function deleteUser(int $id): bool
     {
         $sql = 'DELETE FROM users WHERE id = :id';
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute(['id' => $id]);
+
+        if ($stmt->rowCount() > 0) {
+            return true;
+        }
+
+        return false;
+    }
+
+    public function updateSeller(Seller $seller): bool
+    {
+        $sql = 'UPDATE sellers SET name = :name, user_id = :user_id WHERE id = :id';
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute([
+            'name' => $seller->seller_name,
+            'user_id' => $seller->user_id,
+            'id' => $seller->id,
+        ]);
+
+        if ($stmt->rowCount() > 0) {
+            return true;
+        }
+
+        return false;
+    }
+
+    public function deleteSeller(int $id): bool
+    {
+        $sql = 'DELETE FROM sellers WHERE id = :id';
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute(['id' => $id]);
+
+        if ($stmt->rowCount() > 0) {
+            return true;
+        }
+
+        return false;
+    }
+
+    public function getNonApprovedSellers(): array
+    {
+        $sql = 'SELECT * FROM sellers WHERE approved = 0';
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute();
+        $sellers = $stmt->fetchAll(\PDO::FETCH_ASSOC);
+
+        return array_map(function ($seller) {
+            return $this->getUserById($seller['user_id']);
+        }, $sellers);
+    }
+
+    public function approveSeller(int $id): bool
+    {
+        $sql = 'UPDATE sellers SET approved = 1 WHERE id = :id';
         $stmt = $this->pdo->prepare($sql);
         $stmt->execute(['id' => $id]);
 

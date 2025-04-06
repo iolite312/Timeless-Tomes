@@ -26,7 +26,13 @@ export default defineNuxtConfig({
     envDir: '../',
     server: {
       allowedHosts: true,
-    }
+    },
+    optimizeDeps: {
+      exclude: [
+        '@stripe/stripe-js',
+        'scule'
+      ]
+    },
   },
   runtimeConfig: {
     public: {

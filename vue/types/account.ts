@@ -8,8 +8,9 @@ export interface Account {
   street?: string,
   city?: string,
   postalcode?: string,
-  seller_name?: string
-  seller_id?: number
+  seller_name?: string,
+  seller_id?: number,
+  approved?: boolean
 }
 
 export interface AccountResponse {

@@ -101,19 +101,13 @@ class OrderRepository extends DatabaseRepository
                 'user_id' => $userId,
             ]);
             $orderId = $this->pdo->lastInsertId();
-            // TODO: make it only subtract if payment is successful
-            foreach ($data['orderlines'] as $orderline) {
+            foreach ($data['order_lines'] as $orderline) {
                 $sql = 'INSERT INTO orders_books (order_id, book_id, quantity) VALUES (:order_id, :book_id, :quantity)';
                 $stmt = $this->pdo->prepare($sql);
                 $stmt->execute([
                     'order_id' => $orderId,
                     'book_id' => $orderline['id'],
                     'quantity' => $orderline['quantity'],
-                ]);
-                $sql = 'UPDATE books SET stock = stock - 1 WHERE id = :id';
-                $stmt = $this->pdo->prepare($sql);
-                $stmt->execute([
-                    'id' => $orderline['id'],
                 ]);
             }
             $this->pdo->commit();
@@ -143,6 +137,19 @@ class OrderRepository extends DatabaseRepository
             'status' => $status->value,
             'id' => $orderId,
         ]);
+    }
+
+    public function updateStock(int $orderId): void
+    {
+        $orderlines = $this->getOrderlinesByOrderId($orderId);
+        foreach ($orderlines as $orderline) {
+            $sql = 'UPDATE books SET stock = stock - :quantity WHERE id = :book_id';
+            $stmt = $this->pdo->prepare($sql);
+            $stmt->execute([
+                'quantity' => $orderline->quantity,
+                'book_id' => $orderline->book->id,
+            ]);
+        }
     }
 
     public function checkAvailability(array $data): array

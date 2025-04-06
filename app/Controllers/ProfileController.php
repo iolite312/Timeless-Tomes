@@ -30,7 +30,13 @@ class ProfileController extends Controller
             ];
         }
 
-        return $user->toArray();
+        $jwtToken = TokenHelper::generateToken($user);
+
+        return [
+            'status' => 200,
+            'user' => $user->toArray(),
+            'token' => $jwtToken,
+        ];
     }
 
     public function update()

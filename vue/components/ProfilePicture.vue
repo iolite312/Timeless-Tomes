@@ -27,7 +27,6 @@ const imageRef = useTemplateRef<HTMLImageElement>('image');
 
 useEventListener(imageRef, 'click', click);
 useEventListener(imageRef, 'contextmenu', (e) => {
-  //TODO add resizing to image in the future
   e.preventDefault();
   console.log('clicked');
 });

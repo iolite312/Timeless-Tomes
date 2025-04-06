@@ -3,9 +3,11 @@
 namespace App\Controllers;
 
 use App\Application\Request;
+use App\Helpers\SearchHelper;
 use App\Helpers\TokenHelper;
 use App\Helpers\StripeHelper;
 use App\Enums\PaymentStatusEnum;
+use App\Repositories\BooksRepository;
 use App\Repositories\OrderRepository;
 
 class CartController extends Controller
@@ -76,6 +78,14 @@ class CartController extends Controller
                 /** @var \Stripe\PaymentIntent $paymentIntent */
                 $paymentIntent = $event->data->object;
                 $this->orderRepository->updateOrderStatus($paymentIntent->metadata->order_id, PaymentStatusEnum::COMPLETED);
+                $this->orderRepository->updateStock($paymentIntent->metadata->order_id);
+                $meili = SearchHelper::getInstance();
+                $booksRepo = new BooksRepository();
+                $order = $this->orderRepository->getOrderById($paymentIntent->metadata->order_id);
+                foreach ($order->order_lines as $orderLine) {
+                    $book = $booksRepo->getBookById($orderLine->book->id);
+                    $meili->indexBook($book);
+                }
                 break;
             case 'payment_intent.payment_failed':
                 /** @var \Stripe\PaymentIntent $paymentIntent */

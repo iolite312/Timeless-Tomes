@@ -25,6 +25,8 @@ $router->middleware(EnsureValidLogin::class, function () use ($router) {
     $router->delete('/api/profile/delete', [App\Controllers\ProfileController::class, 'delete']);
     $router->post('/api/cart/availability', [App\Controllers\CartController::class, 'checkAvailability']);
     $router->post('/api/cart/create', [App\Controllers\CartController::class, 'createIntent']);
+    $router->post('/api/profile/seller', [App\Controllers\ProfileController::class, 'createSellerAccount']);
+    $router->put('/api/profile/seller', [App\Controllers\ProfileController::class, 'updateSellerAccount']);
     $router->middleware(EnsureValidRoleAccess::class, function () use ($router) {
         $router->get('/api/seller/products', [App\Controllers\ProductController::class, 'getAllProducts']);
         $router->post('/api/seller/products', [App\Controllers\ProductController::class, 'createProduct']);
@@ -35,5 +37,8 @@ $router->middleware(EnsureValidLogin::class, function () use ($router) {
     $router->middleware(EnsureValidRoleAccess::class, function () use ($router) {
         $router->get('/api/admin/orders', [App\Controllers\AdminController::class, 'getAllOrders']);
         $router->get('/api/admin/users', [App\Controllers\AdminController::class, 'getAllUsers']);
+        $router->get('/api/admin/sellers', [App\Controllers\AdminController::class, 'getNonApprovedSellers']);
+        $router->put('/api/admin/sellers/{id}', [App\Controllers\AdminController::class, 'approveSeller']);
+        $router->delete('/api/admin/sellers/{id}', [App\Controllers\AdminController::class, 'deleteSeller']);
     }, [[RoleEnum::ADMIN]]);
 });

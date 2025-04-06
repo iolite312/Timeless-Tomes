@@ -42,19 +42,22 @@ const items = ref<NavigationMenuItem[][]>([
 onBeforeMount(async () => {
   const result = await useAccountStore().checkRole();
 
-  if (result.role == 'seller' || result.role == 'admin') {
+  if (
+    (result.user.role == 'seller' && result.user.approved) ||
+    result.user.role == 'admin'
+  ) {
     items.value.push([
       {
         label: 'Products',
         icon: 'i-streamline-production-belt',
         to: `/profile/seller/products${
-          result.seller_id ? `?id=${result.seller_id}` : ''
+          result.user.seller_id ? `?id=${result.user.seller_id}` : ''
         }`,
       },
     ]);
   }
 
-  if (result.role == 'admin') {
+  if (result.user.role == 'admin') {
     items.value.push([
       {
         label: 'Users',

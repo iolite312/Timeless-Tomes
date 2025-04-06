@@ -67,6 +67,7 @@
         class="justify-around"
       />
       <UButton
+        v-if="account.role == 'user'"
         label="Delete account"
         variant="solid"
         color="error"
@@ -74,6 +75,9 @@
         type="button"
         @click="warning"
       />
+      <p v-else class="italic text-sm">
+        Admin and seller accounts cannot be deleted
+      </p>
     </UForm>
   </div>
 </template>

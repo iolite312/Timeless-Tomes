@@ -64,11 +64,13 @@ export const useAccountStore = defineStore('account', () => {
     })
   }
 
-  function checkRole(): Promise<Account> {
+  function checkRole(): Promise<UserResponse> {
     axiosClient.defaults.headers.common.Authorization = `Bearer ${token.value}`
     return new Promise((resolve, reject) => {
-      axiosClient.get<Account>('/profile')
+      axiosClient.get<UserResponse>('/profile')
         .then((response) => {
+          token.value = response.data.token
+          account.value = response.data.user
           resolve(response.data)
         })
         .catch((error) => {

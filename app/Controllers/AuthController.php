@@ -2,6 +2,7 @@
 
 namespace App\Controllers;
 
+use App\Helpers\StripeHelper;
 use App\Helpers\TokenHelper;
 use App\Validation\UniqueRule;
 use Rakit\Validation\Validator;
@@ -36,14 +37,18 @@ class AuthController extends Controller
             ];
         }
 
+        $data = [
+            'email' => $data['email'],
+            'password' => password_hash($data['password'], PASSWORD_DEFAULT),
+            'first_name' => $data['first_name'],
+            'last_name' => $data['last_name'],
+        ];
+
         try {
-            $user = $this->userRepository->createUser([
-                'email' => $data['email'],
-                'password' => password_hash($data['password'], PASSWORD_DEFAULT),
-                'first_name' => $data['first_name'],
-                'last_name' => $data['last_name'],
-            ]);
-        } catch (\Exception) {
+            $stripe = new StripeHelper();
+            $data['stripe_customer'] = $stripe->createCustomer($data['email'], $data['first_name'] . ' ' . $data['last_name']);
+            $user = $this->userRepository->createUser($data);
+        } catch (\Exception $e) {
             return [
                 'status' => 500,
                 'message' => 'Something went wrong',
@@ -54,7 +59,7 @@ class AuthController extends Controller
 
         return [
             'status' => 201,
-            'user' => $user,
+            'user' => $user->toArray(),
             'token' => $jwtToken,
         ];
     }
