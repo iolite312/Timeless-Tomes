@@ -6,9 +6,17 @@ TARGET_DIR="/app/public/images/uploads"
 # Ensure the uploads directory exists
 if [ ! -d "$TARGET_DIR" ]; then
     mkdir -p "$TARGET_DIR"
-    mkdir -p "$TARGET_DIR/profile"
-    mkdir -p "$TARGET_DIR/books"
     echo "Directory $TARGET_DIR created."
+fi
+
+if [ ! -d "$TARGET_DIR/profile" ]; then
+    mkdir -p "$TARGET_DIR/profile"
+    echo "Directory $TARGET_DIR/profile created."
+fi
+
+if [ ! -d "$TARGET_DIR/books" ]; then
+    mkdir -p "$TARGET_DIR/books"
+    echo "Directory $TARGET_DIR/books created."
 fi
 
 # Set the correct permissions (777 in this case)
