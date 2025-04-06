@@ -159,9 +159,8 @@ async function validateRegister(event: FormSubmitEvent<RegisterSchema>) {
       useRouter().push('/');
     })
     .catch((error) => {
-      if (error.response.data.status === 422) {
-        console.log(error.response.data.errors);
-        for (const [key, value] of Object.entries(error.response.data.errors)) {
+      if (error.status === 422) {
+        for (const [key, value] of Object.entries(error.errors)) {
           formError.push({
             name: key,
             message: value as string,

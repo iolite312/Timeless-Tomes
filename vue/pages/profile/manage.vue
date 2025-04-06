@@ -95,7 +95,8 @@ definePageMeta({
 
 const userStore = useAccountStore();
 const toast = useToast();
-const modal = useModal();
+const overlay = useOverlay();
+const modal = overlay.create(DeletionModal);
 
 if (!userStore.account) {
   navigateTo('/login');
@@ -153,7 +154,7 @@ async function updateUser(event: FormSubmitEvent<ProfileSchema>) {
     });
 }
 function warning() {
-  modal.open(DeletionModal, {
+  modal.open({
     title: 'Are you sure you want to delete your account?',
     description: 'This action cannot be undone',
     onDeletion() {
@@ -169,6 +170,9 @@ function warning() {
             color: 'error',
           });
         });
+      modal.close();
+    },
+    onClose() {
       modal.close();
     },
   });

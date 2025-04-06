@@ -7,6 +7,9 @@ const axiosClient = axios.create({
 axiosClient.interceptors.response.use(
   response => response,
   error => {
+    if (error.response?.status === 422) {
+      return Promise.reject(error.response.data);
+    }
     console.error('API error:', error.response?.data || error.message);
     throw createError({
       statusCode: error.response?.status || 500,

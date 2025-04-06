@@ -45,14 +45,14 @@ defineProps({
     required: true,
   },
 });
-
-const modal = useModal();
+const overlay = useOverlay();
+const modal = overlay.create(DeletionModal);
 const toast = useToast();
 const bookStore = useBookStore();
 const emit = defineEmits(['remove']);
 
 function warning(id: number) {
-  modal.open(DeletionModal, {
+  modal.open({
     title: 'Are you sure you want to delete this product?',
     description: 'This action cannot be undone',
     onDeletion() {
@@ -66,6 +66,9 @@ function warning(id: number) {
       setTimeout(() => {
         emit('remove');
       }, 500);
+      modal.close();
+    },
+    onClose() {
       modal.close();
     },
   });

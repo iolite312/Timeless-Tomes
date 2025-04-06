@@ -33,7 +33,7 @@ class AuthController extends Controller
         if ($validation->fails()) {
             return [
                 'status' => 422,
-                'error' => 'approve is pending or name is already in use',
+                'errors' => $validation->errors()->firstOfAll(),
             ];
         }
 

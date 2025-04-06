@@ -5,15 +5,13 @@
     </template>
     <template #footer>
       <div class="flex gap-2">
-        <UButton color="neutral" label="Close" @click="modal.close()" />
+        <UButton color="neutral" label="Close" @click="onClose" />
         <UButton color="error" label="Delete" @click="onDeletion" />
       </div>
     </template>
   </UModal>
 </template>
 <script lang="ts" setup>
-const modal = useModal();
-
 defineProps({
   title: {
     type: String,
@@ -25,10 +23,14 @@ defineProps({
   },
 });
 
-const emit = defineEmits(['deletion']);
+const emit = defineEmits(['deletion', 'close']);
 
 const onDeletion = () => {
   emit('deletion');
+};
+
+const onClose = () => {
+  emit('close');
 };
 </script>
 

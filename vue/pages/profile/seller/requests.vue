@@ -37,7 +37,7 @@ async function onSubmit() {
     .catch((error) => {
       useToast().add({
         title: 'Error',
-        description: error.message,
+        description: error.error,
         color: 'error',
       });
     });
